@@ -113,9 +113,6 @@ html lang="en-US"
     footer.footer
       .footer_links
         .footer_nav
-          =link_to t('.documentation'), 'http://content.fromthepage.com/project-owner-documentation/', target: '_blank'
-          =link_to t('.blog'), 'http://content.fromthepage.com', target: '_blank'
-          =link_to t('.about'), 'https://content.fromthepage.com/about/'
           =link_to t('.terms_and_conditions'), 'https://content.fromthepage.com/terms-of-service/'
           =link_to t('.privacy_policy'), 'https://content.fromthepage.com/privacy-policy/'
           -if request.original_url.include?("fromthepage.com")

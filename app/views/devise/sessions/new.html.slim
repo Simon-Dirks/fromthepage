@@ -24,11 +24,6 @@ section.signon
   - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
     =link_to t('.forgot_your_password'), new_password_path(resource_name), class: 'forgot'
 
-  -if ENABLE_SAML  
-    hr
-    h4= t('.or')
-    =button_to(t('.sign_in_with_institution'), registrations_choose_provider_path, class: 'strong signin')
-
   hr
 
 

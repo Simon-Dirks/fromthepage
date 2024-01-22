@@ -6,33 +6,11 @@
 
                     <div class="col-lg-4 mobil">
                         <a href="index.html" class="logo"><%= image_tag("footer-logo.svg") %></a>
-    
-                        <ul class="social-media">
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-facebook-square"></i></a></li>
-                            <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
-                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                        </ul>
                     </div>
-
-
-                    <ul class="list">
-                        <li><%= link_to 'Transcription for Archives and Special Collections', special_collections_path %></li>
-                        <li><%= link_to 'Transcription for State & Provincial Archives', state_archives_path %></li>
-                        <li><%= link_to 'Transcription for Digital Scholarship', digital_scholarship_path %></li>
-                        <li><%= link_to 'Transcription for Public Libraries', public_libraries_path %></li>
-                    </ul>
                 </div>
 
                 <div class="col-lg-4 desktop">
                     <a href="https://www.fromthepage.com" class="logo"><%= image_tag("footer-logo.svg") %></a>
-
-                    <ul class="social-media">
-                        <li><a href="https://twitter.com/_FromThePage_" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                        <li><a href="https://www.facebook.com/FromThePageTranscription" target="_blank"><i class="fa fa-facebook-square"></i></a></li>
-                        <li><a href="https://www.youtube.com/fromthepage"><i class="fa fa-youtube-play" target="_blank"></i></a></li>
-                        <li><a href="https://www.instagram.com/_fromthepage_/"><i class="fa fa-instagram" target="_blank"></i></a></li>
-                    </ul>
                 </div>
 
                 <div class="col-lg-4">
@@ -42,7 +20,6 @@
                         <li><%= link_to t('layouts.application.about'), 'https://content.fromthepage.com/about-us/', target: '_blank' %></li>
                         <li><%= link_to t('layouts.application.terms_and_conditions'), 'https://content.fromthepage.com/terms-of-service/', target: '_blank' %></li>
                         <li><%= link_to t('layouts.application.privacy_policy'), 'https://content.fromthepage.com/privacy-policy/', target: '_blank' %></li>
-                        <li><%= link_to t('layouts.application.contact_us'), contact_path(contact_form_token) %></li>
                         <% if request.original_url.include?("fromthepage.com") %></li>
                             <li><%= link_to t('layouts.application.pricing'), pricing_path, target: '_blank' %></li>
                         <% end %>

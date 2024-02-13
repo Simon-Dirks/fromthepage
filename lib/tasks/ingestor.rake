@@ -299,7 +299,6 @@ namespace :fromthepage do
         if File.exist? xml_fn
           print "\t\tconvert_to_work reading raw XML text from #{xml_fn}\n"
           page.source_text = File.read(xml_fn).gsub(/\[+/, '[').gsub(/\]+/, ']')
-          page.xml_text = File.read(xml_fn).gsub(/\[+/, '[').gsub(/\]+/, ']')
           # if there are errors, consider escaping
         elsif File.exist? ocr_fn
           print "\t\tconvert_to_work reading raw OCR text from #{ocr_fn}\n"

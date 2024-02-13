@@ -54,7 +54,7 @@
         -if page.xml_text.present?
           -transcription = xml_to_html(page.xml_text, false, false, nil, params[:article_id])
         -elsif page.source_text.present?
-          -transcription = source_to_html(page.xml_text)
+          -transcription = source_to_html(page.source_text)
         -if @search_string
           -transcription = highlight_search_terms(transcription, @search_string)
         -if current_user

@@ -71,7 +71,7 @@
             .incomplete_text
               b ==t('.this_page_is_incomplete')
               =link_to(t('.help_complete'), action, class: 'button', onclick: "resultClicked();")
-          -elsif (page.status.nil? && collection.active?)
+          -elsif (page.status.nil? && @collection.active?)
             .incomplete_transcription
               ==transcription.force_encoding('utf-8')
             .incomplete_text

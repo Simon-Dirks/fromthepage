@@ -18,4 +18,4 @@ ul
                   = topic_name
                   ul
                     - filenames.each do |filename|
-                      li = filename
+                      li class=(filename == page_title ? 'bold' : '') = filename

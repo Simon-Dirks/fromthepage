@@ -98,7 +98,9 @@
   p =link_to t('.more_help'), collection_work_help_path(@collection.owner, @collection, @page.work), target: '_blank'
 
 .page-tree-nav
-  = render :partial => "shared/page_tree_nav"
+  = render({ :partial => '/shared/page_tree_nav', :locals => { :page_id => @page.id }})
+
+
 
 h2.legend =t('.notes_and_questions')
 .page-notes

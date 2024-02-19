@@ -12,14 +12,7 @@ p Page title: #{page_title}
 ul
   - nav_structure_data.each do |box_name, parts|
     - box_num = box_name.to_s.gsub('Box ', '')
-    - box_filename_prefixes = box_filename_prefixes_data[box_num]
-    p #{box_num} #{box_filename_prefixes} #{page_title_prefix}
-    = debug box_num
-    = debug box_filename_prefixes
-    = debug page_title_prefix
-    = box_filename_prefixes_data["1"]
-    = box_filename_prefixes
-    li class=(box_filename_prefixes && box_filename_prefixes.include?(page_title_prefix) ? 'bold' : '')
+    li class=(box_contains_filename_prefix?(box_filename_prefixes_data, box_num, page_title_prefix) ? 'bold' : '')
       = box_name
       ul
         - parts.each do |part_name, topics|

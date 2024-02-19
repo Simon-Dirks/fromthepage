@@ -14,7 +14,10 @@ ul
     - box_num = box_name.to_s.gsub('Box ', '')
     - box_filename_prefixes = box_filename_prefixes_data[box_num]
     p #{box_num} #{box_filename_prefixes} #{page_title_prefix}
-    li class=(!box_filename_prefixes.nil? && box_filename_prefixes.include?(page_title_prefix) ? 'bold' : '')
+    = debug box_num
+    = debug box_filename_prefixes
+    = debug page_title_prefix
+    li class=(box_filename_prefixes && box_filename_prefixes.include?(page_title_prefix) ? 'bold' : '')
       = box_name
       ul
         - parts.each do |part_name, topics|

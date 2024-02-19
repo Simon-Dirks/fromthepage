@@ -11,7 +11,7 @@ p Page title: #{page_title}
 
 ul
   - nav_structure_data.each do |box_name, parts|
-    - box_num = box_name.gsub('Box ', '')
+    - box_num = box_name.to_s.gsub('Box ', '')
     li class=(box_filename_prefixes[box_num].include?(page_title_prefix) ? 'bold' : '')
       = box_name
       ul

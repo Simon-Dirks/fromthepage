@@ -1,4 +1,5 @@
-- nav_data = { "Box 1": { "Part I - A Logician's Approach to Ethics": { "Nature of Ethics": ["HUA...", "HUA_..."], "Literature": ["..."] }, "Part II - The Structure of Ethical Theories": { "Attempts at Moral Science": ["hou02785c00912_0001"] } }, "Box 2": {} }
+- nav_data = { "Box 1": { "Part I - A Logician's Approach to Ethics": ["Nature of Ethics", "Literature"], "Part II - The Structure of Ethical Theories": ["Attempts at Moral Science"] }, "Box 2": {}, "Box 3": {}, "Box 4": {}, "Box 5": {}, "Box 6": {}, "Box 7": {}, "Box 8": {}, "Box 9": {}, "Box 10": {}, "Box 11": {}, "Box 12": {}, "Box 13": {}, "Box 14": {}, "Box 15": {}, "Box 16": {}, "Box 17": {}, "Box 18": {}, "Box 19": {}, "Box 20": {}, "Box 21": {}, "Box 22": {}, "Box 23": {}, "Box 24": {}, "Box 25": {}, "Box 26": {}, "Box 27": {}, "Box 28": {}, "Box 29": {}, "Box 30": {}, "Box 31": {},
+}
 
 h2 Navigation Data
 
@@ -13,9 +14,6 @@ ul
           li
             = part_name
             ul
-              - topics.each do |topic_name, filenames|
+              - topics.each do |topic_name|
                 li
                   = topic_name
-                  ul
-                    - filenames.each do |filename|
-                      li class=(filename == page_title ? 'bold' : '') = filename

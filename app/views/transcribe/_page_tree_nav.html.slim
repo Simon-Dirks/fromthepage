@@ -1,4 +1,4 @@
-- nav_data = { "Box 1": { "Part I - A Logician's Approach to Ethics": { "Nature of Ethics": ["HUA...", "HUA_..."], "Literature": ["..."] }, "Part II - The Structure of Ethical Theories": { "Attempts at Moral Science": ["HUA.."] } }, "Box 2": {} }
+- nav_data = { "Box 1": { "Part I - A Logician's Approach to Ethics": { "Nature of Ethics": ["HUA...", "HUA_..."], "Literature": ["..."] }, "Part II - The Structure of Ethical Theories": { "Attempts at Moral Science": ["hou02785c00912_0001"] } }, "Box 2": {} }
 
 h2 Navigation Data
 
@@ -6,7 +6,7 @@ p Page title: #{page_title}
 
 ul
   - nav_data.each do |box_name, parts|
-    li
+    li class=(box_contains_page_title?(nav_data, box_name, page_title) ? 'bold' : '')
       = box_name
       ul
         - parts.each do |part_name, topics|

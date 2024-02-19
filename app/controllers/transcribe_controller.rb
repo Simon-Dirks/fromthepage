@@ -2,6 +2,7 @@ class TranscribeController  < ApplicationController
 
   include AbstractXmlController
   include DisplayHelper
+  include TreeNavHelper
 
   require 'rexml/document'
   include Magick

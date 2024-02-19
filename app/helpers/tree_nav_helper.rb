@@ -1,9 +1,9 @@
 module TreeNavHelper
   def contains_page_title?(nav_data, page_title, box_name = nil, part_name = nil, topic_name = nil)
-    if parts.nil?
+    if nav_data.nil?
       return false
     end
-    
+
     nav_data.each do |current_box_name, parts|
       current_part_name = nil
       current_topic_name = nil

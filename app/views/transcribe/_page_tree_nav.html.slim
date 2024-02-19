@@ -1,13 +1,18 @@
-- nav_data = { "Box 1": { "Part I - A Logician's Approach to Ethics": ["Nature of Ethics", "Literature"], "Part II - The Structure of Ethical Theories": ["Attempts at Moral Science"] }, "Box 2": {}, "Box 3": {}, "Box 4": {}, "Box 5": {}, "Box 6": {}, "Box 7": {}, "Box 8": {}, "Box 9": {}, "Box 10": {}, "Box 11": {}, "Box 12": {}, "Box 13": {}, "Box 14": {}, "Box 15": {}, "Box 16": {}, "Box 17": {}, "Box 18": {}, "Box 19": {}, "Box 20": {}, "Box 21": {}, "Box 22": {}, "Box 23": {}, "Box 24": {}, "Box 25": {}, "Box 26": {}, "Box 27": {}, "Box 28": {}, "Box 29": {}, "Box 30": {}, "Box 31": {},
+- nav_structure_data = { "Box 1": { "Part I - A Logician's Approach to Ethics": ["Nature of Ethics", "Literature"], "Part II - The Structure of Ethical Theories": ["Attempts at Moral Science"] }, "Box 2": {}, "Box 3": {}, "Box 4": {}, "Box 5": {}, "Box 6": {}, "Box 7": {}, "Box 8": {}, "Box 9": {}, "Box 10": {}, "Box 11": {}, "Box 12": {}, "Box 13": {}, "Box 14": {}, "Box 15": {}, "Box 16": {}, "Box 17": {}, "Box 18": {}, "Box 19": {}, "Box 20": {}, "Box 21": {}, "Box 22": {}, "Box 23": {}, "Box 24": {}, "Box 25": {}, "Box 26": {}, "Box 27": {}, "Box 28": {}, "Box 29": {}, "Box 30": {}, "Box 31": {},
 }
+
+- box_filename_prefixes = { "1": ["hou02785c00932"], "2": ["hou02785c00933"], "3": ["hou02785c00934"], "4": ["hou02785c00935"], "5": ["hou02785c00898"], "6": ["hou02785c00899"], "7": ["hou02785c00900"], "8": ["hou02785c00917"], "9": ["hou02785c00918"], "10": ["hou02785c00919"], "11": ["hou02785c00920"], "12": ["hou02785c00921"], "13": ["hou02785c00922"], "14": ["hou02785c00923"], "15": ["hou02785c00924", "hou02785c00925"], "16": ["hou02785c00901", "hou02785c00926"], "17": ["hou02785c00902"], "18": ["hou02785c00903"], "19": ["hou02785c00904"], "20": ["hou02785c00905"], "21": ["hou02785c00906"], "22": ["hou02785c00907"], "23": ["hou02785c00908", "hou02785c00927"], "24": ["hou02785c00909"], "25": ["hou02785c00910"], "26": ["hou02785c00911"], "27": ["hou02785c00912"], "28": ["hou02785c00913"], "29": ["hou02785c00914"], "30": ["hou02785c00915"], "31": ["hou02785c00929", "hou02785c00930", "hou02785c00931"] }
 
 h2 Navigation Data
 
 p Page title: #{page_title}
 
+- page_title_prefix = page_title.split('_').first
+
 ul
-  - nav_data.each do |box_name, parts|
-    li
+  - nav_structure_data.each do |box_name, parts|
+    - box_num = box_name.gsub('Box ', '')
+    li class=(box_filename_prefixes[box_num].include?(page_title_prefix) ? 'bold' : '')
       = box_name
       ul
         - parts.each do |part_name, topics|

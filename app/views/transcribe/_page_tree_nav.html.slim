@@ -6,7 +6,7 @@ p Page title: #{page_title}
 
 ul
   - nav_data.each do |box_name, parts|
-    li class=(contains_page_title?(nav_data, page_title) ? 'bold' : '')
+    li class=(contains_page_title?(nav_data, page_title, box_name) ? 'bold' : '')
       = box_name
       ul
         - parts.each do |part_name, topics|

@@ -1,7 +1,12 @@
 module TreeNavHelper
-  def box_contains_page_title?(nav_data, box_name, page_title)
-    contains_page_title = nav_data.dig(box_name).to_a.flatten.any? { |item| item.is_a?(String) && item.include?(page_title) }
-    logger.info("Page title #{page_title} is#{contains_page_title ? '' : ' not'} contained in box #{box_name}, #{nav_data.dig(box_name).to_a.flatten}")
-    contains_page_title
+  def contains_page_title?(nav_data, page_title)
+    nav_data.each do |_box_name, parts|
+      parts.each do |_part_name, topics|
+        topics.each do |_topic_name, filenames|
+          return true if filenames.include?(page_title)
+        end
+      end
+    end
+    false
   end
 end

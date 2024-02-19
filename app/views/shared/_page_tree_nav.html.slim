@@ -1,2 +1,19 @@
-.columns
-  article.maincol test
+- nav_data = { "Box 1": { "Part I - A Logician's Approach to Ethics": { "Nature of Ethics": ["HUA...", "HUA_..."], "Literature": ["..."] }, "Part II - The Structure of Ethical Theories": { "Attempts at Moral Science": ["HUA.."] } }, "Box 2": {} }
+
+h2 Navigation Data
+
+ul
+  - nav_data.each do |box_name, parts|
+    li
+      = box_name
+      ul
+        - parts.each do |part_name, topics|
+          li
+            = part_name
+            ul
+              - topics.each do |topic_name, filenames|
+                li
+                  = topic_name
+                  ul
+                    - filenames.each do |filename|
+                      li = filename

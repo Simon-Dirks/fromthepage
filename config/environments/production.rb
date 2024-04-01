@@ -45,8 +45,8 @@ Rails.application.configure do
   # BWB 2018-08-16 changed from :info to :warn
   # BWB 2018-11-17 changed from :warn to :info
   # Set to :debug to see everything in the log.
-  config.log_level = :info
-  #config.log_level = :debug
+  #config.log_level = :info
+  config.log_level = :debug
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]

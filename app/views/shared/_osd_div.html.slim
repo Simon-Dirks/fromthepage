@@ -8,6 +8,7 @@
   a#osd_zoom_in =svg_symbol "#icon-zoom-in", class: 'icon'
   a#osd_zoom_out =svg_symbol "#icon-zoom-out", class: 'icon'
   a#osd_home =svg_symbol "#icon-fit-view", class: 'icon'
+  a#osd_fit_width(title="#{t('.fit_width')}") =svg_symbol "#icon-fit-width", class: 'icon'
   a#osd_fullpage =svg_symbol "#icon-expand", class: 'icon'
   a#osd_rotate_left =svg_symbol "#icon-rotate-left", class: 'icon'
   a#osd_rotate_right =svg_symbol "#icon-rotate-right", class: 'icon'
@@ -75,7 +76,6 @@
         nextButton: "osd_next",
         maxZoomPixelRatio: 10,
         visibilityRatio: 0.5,
-        fitBounds: true,
         preserveViewport: true,
         showReferenceStrip: #{@page.nil?},
         referenceStripScroll: 'vertical',
@@ -159,15 +159,14 @@
       $(function() {
         
         var anno = AnnotoriousOSD.createOSDAnnotator(viewer, {
-          // make sure that the boxes over the text annotations are inert
-          pointerSelectAction: 'NONE'
-        });
-        anno.setFormatter(function() { 
-          // make the annotation boxes transparent rather than opaque
-          return { fillOpacity: 0 };
+          pointerSelectAction: 'NONE',
+          style: {
+            fillOpacity: 0,
+            strokeOpacity: 0
+          }
         });
 
-
+      
         // set up the text layer plugin on Annotorious
         var textlayer = OSDTextLayer.mountExtension(anno, {
           label: OSDTextLayer.transcriptionLabel,

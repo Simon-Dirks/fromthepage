@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "2.7.3"
+ruby "2.7.8"
 
 gem 'rails', '6.1.7.6'
 
@@ -133,5 +133,5 @@ gem 'newrelic_rpm'
 gem 'open3'
 
 # Copy to clipboard
-gem 'clipboard-rails' 
+gem 'clipboard-rails'
 gem 'ajax-datatables-rails', '~> 1.0.0'

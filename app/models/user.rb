@@ -138,8 +138,8 @@ class User < ApplicationRecord
 
     # create users if they don't exist
     unless user
-      email = data['email3'] unless data['email3'].blank? 
-      email = data['email2'] unless data['email2'].blank? 
+      email = data['email3'] unless data['email3'].blank?
+      email = data['email2'] unless data['email2'].blank?
       email = data['email'] unless data['email'].blank?
       login = email.gsub(/@.*/,'')
       # avoid duplicate logins
@@ -280,7 +280,7 @@ class User < ApplicationRecord
       collaborator_sets = self.document_sets.where(:is_public => false).joins(:collaborators).where("document_set_collaborators.user_id = ?", user.id)
       parent_collaborator_sets = []
       collaborator_collections.each{|c| parent_collaborator_sets += c.document_sets}
-    
+
       (filtered_public_collections+collaborator_collections+owned_collections+public_sets+collaborator_sets+parent_collaborator_sets).uniq
     else
       (filtered_public_collections+public_sets)
@@ -379,7 +379,7 @@ class User < ApplicationRecord
   end
 
   def set_default_footer_block
-    self.footer_block = "For questions about this project, contact at."
+    self.footer_block = "For questions about this project, contact <a href='mailto:i.vandertuin@uu.nl'>i.vandertuin@uu.nl</a>."
     save
   end
 

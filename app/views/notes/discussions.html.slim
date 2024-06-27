@@ -20,7 +20,7 @@
 	    		span &nbsp; in #{page.work.title}
 	    	=t(".most_recent_of")
 	    	=link_to t(".total_notes", count: page.notes.count), collection_forum_page_path(@collection.owner, @collection, page.work, page.id, anchor: "notes")
-      .user-bubble.editable.comment-bubble | Note not found
+      / .user-bubble.editable.comment-bubble | Note not found
       / -if note && note.respond_to?(:id)
       /   .user-bubble.editable.comment-bubble(id="note-#{note.id}")
       /     =link_to(user_profile_path(:user_id => note.user.id))

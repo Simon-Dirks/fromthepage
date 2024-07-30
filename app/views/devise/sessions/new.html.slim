@@ -24,11 +24,6 @@ section.signon
   - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
     =link_to t('.forgot_your_password'), new_password_path(resource_name), class: 'forgot'
 
-  -if ENABLE_SAML  
-    hr
-    h4= t('.or')
-    =button_to(t('.sign_in_with_institution'), registrations_choose_provider_path, class: 'strong signin')
-
   hr
 
 
@@ -37,12 +32,6 @@ section.signon
     p= t('.sign_up_as_transcriber_message')
 
     = link_to t('.sign_up_now'), new_user_registration_path, class: 'button big'
-
-  section#free_trial.signup-links
-    h2= t('.start_free_trial')
-    p= t('.start_free_trial_message')
-
-    =link_to t('.start_free_trial'), users_new_trial_path, class: 'button big'
 
   hr.clearfix
 

@@ -1433,6 +1433,7 @@ form:invalid button[type=submit] {
   flex-direction: column;
   overflow: hidden;
   max-width: 250px;
+  margin: 0 auto;
 }
 @media (max-width: 992px) {
   .home-count .item {

@@ -50,7 +50,11 @@
         h4.work-page_title =link_to page.title, page_params(page), onclick: "resultClicked();"
 
       .work-page_text[*language_attrs(@collection)]
-        -transcription = xml_to_html(page.xml_text, false, false, nil, params[:article_id])
+        -transcription = nil
+        -if page.xml_text.present?
+          -transcription = xml_to_html(page.xml_text, false, false, nil, params[:article_id])
+        -elsif page.source_text.present?
+          -transcription = source_to_html(page.source_text)
         -if @search_string
           -transcription = highlight_search_terms(transcription, @search_string)
         -if current_user
@@ -67,6 +71,11 @@
             .incomplete_text
               b ==t('.this_page_is_incomplete')
               =link_to(t('.help_complete'), action, class: 'button', onclick: "resultClicked();")
+          -elsif (page.status.nil? && @collection.active?)
+            .incomplete_transcription
+              ==transcription.force_encoding('utf-8')
+            .incomplete_text
+              p == t('.this_page_is_not', status: t('.corrected'), help: link_to(t('.help_correct'), action, onclick: "resultClicked();"))
           -else
             ==transcription.force_encoding('utf-8')
 

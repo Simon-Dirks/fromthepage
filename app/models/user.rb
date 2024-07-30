@@ -439,7 +439,7 @@ class User < ApplicationRecord
   end
 
   def set_default_footer_block
-    self.footer_block = "For questions about this project, contact at."
+    self.footer_block = "For questions about this project, contact <a href='mailto:i.vandertuin@uu.nl'>i.vandertuin@uu.nl</a>."
     save
   end
 

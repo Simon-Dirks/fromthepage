@@ -6,8 +6,8 @@
 #  content                :text(65535)
 #  header                 :string(255)
 #  row                    :integer
-#  created_at             :datetime
-#  updated_at             :datetime
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
 #  page_id                :integer
 #  section_id             :integer
 #  transcription_field_id :integer

@@ -4,10 +4,10 @@
 #
 #  id          :integer          not null, primary key
 #  created_on  :datetime
-#  source_text :text(16777215)
+#  source_text :text(65535)
 #  title       :string(255)
 #  version     :integer          default(0)
-#  xml_text    :text(16777215)
+#  xml_text    :text(65535)
 #  article_id  :integer
 #  user_id     :integer
 #

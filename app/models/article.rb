@@ -10,10 +10,10 @@
 #  longitude     :decimal(8, 5)
 #  pages_count   :integer          default(0)
 #  provenance    :string(255)
-#  source_text   :text(16777215)
+#  source_text   :text(65535)
 #  title         :string(255)
 #  uri           :string(255)
-#  xml_text      :text(16777215)
+#  xml_text      :text(65535)
 #  collection_id :integer
 #  created_by_id :integer
 #

@@ -22,8 +22,8 @@
 #  title_leaf     :integer
 #  use_ocr        :boolean          default(FALSE)
 #  zip_file       :string(255)
-#  created_at     :datetime
-#  updated_at     :datetime
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #  book_id        :string(255)
 #  user_id        :integer
 #  work_id        :integer

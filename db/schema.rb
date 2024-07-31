@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_10_132602) do
+ActiveRecord::Schema.define(version: 2024_07_31_142727) do
 
   create_table "ahoy_activity_summaries", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "date"
@@ -414,6 +414,12 @@ ActiveRecord::Schema.define(version: 2024_07_10_132602) do
     t.boolean "use_ocr", default: false
   end
 
+  create_table "labels", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "metadata_coverages", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "key"
     t.integer "count", default: 0
@@ -478,6 +484,14 @@ ActiveRecord::Schema.define(version: 2024_07_10_132602) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controller", "view"], name: "index_page_blocks_on_controller_and_view"
+  end
+
+  create_table "page_label_links", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "page_id"
+    t.integer "label_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "display_text"
   end
 
   create_table "page_versions", id: :integer, charset: "utf8mb3", force: :cascade do |t|

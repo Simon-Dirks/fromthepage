@@ -9,8 +9,8 @@
 #  note_added          :boolean          default(TRUE)
 #  owner_stats         :boolean          default(FALSE)
 #  user_activity       :boolean          default(TRUE)
-#  created_at          :datetime
-#  updated_at          :datetime
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #  user_id             :integer
 #
 class Notification < ApplicationRecord

@@ -6,8 +6,8 @@
 #  body          :text(16777215)
 #  depth         :integer
 #  title         :string(255)
-#  created_at    :datetime
-#  updated_at    :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #  collection_id :integer
 #  page_id       :integer
 #  parent_id     :integer

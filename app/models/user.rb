@@ -47,7 +47,6 @@
 #
 # Indexes
 #
-#  index_users_on_deleted               (deleted)
 #  index_users_on_login                 (login)
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_slug                  (slug) UNIQUE

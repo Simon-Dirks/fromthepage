@@ -11,8 +11,8 @@
 #  slug                       :string(255)
 #  title                      :string(255)
 #  works_count                :integer          default(0)
-#  created_at                 :datetime
-#  updated_at                 :datetime
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
 #  collection_id              :integer
 #  next_untranscribed_page_id :integer
 #  owner_user_id              :integer

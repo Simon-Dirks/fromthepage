@@ -10,8 +10,8 @@
 #  is_public        :boolean          default(TRUE)
 #  prerender        :string(8191)
 #  prerender_mailer :string(8191)
-#  created_at       :datetime
-#  updated_at       :datetime
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #  article_id       :integer
 #  collection_id    :integer
 #  note_id          :integer
@@ -23,15 +23,15 @@
 # Indexes
 #
 #  index_deeds_on_article_id                                        (article_id)
-#  index_deeds_on_collection_id_and_created_at                      (collection_id,created_at)
-#  index_deeds_on_collection_id_and_deed_type_and_created_at        (collection_id,deed_type,created_at)
-#  index_deeds_on_created_at_and_collection_id                      (created_at,collection_id)
+#  index_deeds_on_collection_id_and_created_at                      (collection_id,created_at DESC)
+#  index_deeds_on_collection_id_and_deed_type_and_created_at        (collection_id,deed_type,created_at DESC)
+#  index_deeds_on_created_at_and_collection_id                      (created_at DESC,collection_id)
 #  index_deeds_on_note_id                                           (note_id)
 #  index_deeds_on_page_id                                           (page_id)
-#  index_deeds_on_user_id_and_created_at                            (user_id,created_at)
+#  index_deeds_on_user_id_and_created_at                            (user_id,created_at DESC)
 #  index_deeds_on_visit_id                                          (visit_id)
-#  index_deeds_on_work_id_and_created_at                            (work_id,created_at)
-#  index_deeds_on_work_id_and_deed_type_and_user_id_and_created_at  (work_id,deed_type,user_id,created_at)
+#  index_deeds_on_work_id_and_created_at                            (work_id,created_at DESC)
+#  index_deeds_on_work_id_and_deed_type_and_user_id_and_created_at  (work_id,deed_type,user_id,created_at DESC)
 #
 class Deed < ApplicationRecord
   belongs_to :article, optional: true

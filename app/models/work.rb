@@ -5,10 +5,10 @@
 #  id                              :integer          not null, primary key
 #  author                          :string(255)
 #  created_on                      :datetime
-#  description                     :text(16777215)
+#  description                     :string(4000)
 #  description_status              :string(255)      default("undescribed")
 #  document_date                   :string(255)
-#  document_history                :text(16777215)
+#  document_history                :text(65535)
 #  editorial_notes                 :text(65535)
 #  featured_page                   :integer
 #  genre                           :string(255)
@@ -20,8 +20,8 @@
 #  ocr_correction                  :boolean          default(FALSE)
 #  original_metadata               :text(65535)
 #  pages_are_meaningful            :boolean          default(TRUE)
-#  permission_description          :text(16777215)
-#  physical_description            :text(16777215)
+#  permission_description          :text(65535)
+#  physical_description            :text(65535)
 #  picture                         :string(255)
 #  recipient                       :string(255)
 #  restrict_scribes                :boolean          default(FALSE)
@@ -33,7 +33,7 @@
 #  source_location                 :string(255)
 #  supports_translation            :boolean          default(FALSE)
 #  title                           :string(255)
-#  transcription_conventions       :text(16777215)
+#  transcription_conventions       :text(65535)
 #  transcription_version           :integer          default(0)
 #  translation_instructions        :text(65535)
 #  uploaded_filename               :string(255)

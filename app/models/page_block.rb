@@ -5,11 +5,11 @@
 #  id          :integer          not null, primary key
 #  controller  :string(255)
 #  description :string(255)
-#  html        :text(16777215)
+#  html        :text(65535)
 #  tag         :string(255)
 #  view        :string(255)
-#  created_at  :datetime
-#  updated_at  :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 # Indexes
 #

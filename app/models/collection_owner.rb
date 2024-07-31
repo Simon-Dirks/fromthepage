@@ -2,8 +2,8 @@
 #
 # Table name: collection_owners
 #
-#  created_at    :datetime
-#  updated_at    :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #  collection_id :integer
 #  user_id       :integer
 #

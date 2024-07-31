@@ -8,8 +8,8 @@
 #  sc_canvas_label    :string(255)
 #  sc_service_context :string(255)
 #  width              :integer
-#  created_at         :datetime
-#  updated_at         :datetime
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #  page_id            :integer
 #  sc_canvas_id       :string(255)
 #  sc_id              :string(255)

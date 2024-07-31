@@ -5,8 +5,8 @@
 #  id            :integer          not null, primary key
 #  label         :string(255)
 #  version       :string(255)      default("2")
-#  created_at    :datetime
-#  updated_at    :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #  at_id         :string(255)
 #  collection_id :integer
 #  parent_id     :integer

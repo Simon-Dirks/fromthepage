@@ -8,8 +8,8 @@
 #  provenance         :string(255)
 #  snippet            :text(65535)
 #  status             :string(255)      default("unconfirmed")
-#  created_at         :datetime
-#  updated_at         :datetime
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #  article_version_id :integer
 #  auditor_user_id    :integer
 #  author_user_id     :integer
@@ -25,6 +25,7 @@
 #  index_flags_on_note_id             (note_id)
 #  index_flags_on_page_version_id     (page_version_id)
 #  index_flags_on_reporter_user_id    (reporter_user_id)
+#  index_flags_on_status              (status)
 #
 require 'flagger'
 

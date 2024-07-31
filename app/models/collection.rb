@@ -12,10 +12,10 @@
 #  enable_spellcheck              :boolean          default(FALSE)
 #  facets_enabled                 :boolean          default(FALSE)
 #  field_based                    :boolean          default(FALSE)
-#  footer_block                   :text(16777215)
+#  footer_block                   :string(2000)
 #  help                           :text(65535)
 #  hide_completed                 :boolean          default(TRUE)
-#  intro_block                    :text(16777215)
+#  intro_block                    :text(65535)
 #  is_active                      :boolean          default(TRUE)
 #  language                       :string(255)
 #  license_key                    :string(255)
@@ -43,7 +43,6 @@
 # Indexes
 #
 #  index_collections_on_owner_user_id                   (owner_user_id)
-#  index_collections_on_restricted                      (restricted)
 #  index_collections_on_slug                            (slug) UNIQUE
 #  index_collections_on_thredded_messageboard_group_id  (thredded_messageboard_group_id)
 #

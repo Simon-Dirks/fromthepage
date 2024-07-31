@@ -20,8 +20,8 @@
 #  translated_pages        :integer
 #  translated_review       :integer
 #  translation_complete    :integer
-#  created_at              :datetime
-#  updated_at              :datetime
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #  work_id                 :integer
 #
 # Indexes

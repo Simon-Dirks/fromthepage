@@ -9,8 +9,8 @@
 #  page_number :string(255)
 #  page_type   :string(255)
 #  page_w      :integer
-#  created_at  :datetime
-#  updated_at  :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #  ia_work_id  :integer
 #  page_id     :integer
 #

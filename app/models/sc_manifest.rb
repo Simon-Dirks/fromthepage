@@ -4,11 +4,11 @@
 #
 #  id                   :integer          not null, primary key
 #  first_sequence_label :string(255)
-#  label                :text(65535)
+#  label                :text(255)
 #  metadata             :text(65535)
 #  version              :string(255)      default("2")
-#  created_at           :datetime
-#  updated_at           :datetime
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
 #  at_id                :string(255)
 #  collection_id        :integer
 #  first_sequence_id    :string(255)

@@ -18,7 +18,7 @@
           th = f.label :labels, t('.page_labels')
           td
             - label_options = Label.all.map { |label| [label.title, label.id] }
-            = f.select :label_ids, options_for_select(label_options, @page.label_ids), {}, multiple: true
+            = f.select :label_ids, options_for_select(label_options, @page.label_ids), { include_blank: 'No labels'}, multiple: true
 
         -if @work.supports_translation
           tr

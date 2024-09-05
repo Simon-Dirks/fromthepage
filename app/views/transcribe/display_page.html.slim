@@ -99,14 +99,13 @@
           -else
             =render ({partial: 'transcription_field/field_layout', locals: {collection_id: @collection, transcribe: true}})
 
+.page-labels
+  = render :partial => "page_labels/page_labels"
+
 .fgfaded
   ==@work.set_transcription_conventions
   =render :partial => 'shared/markup_help'
   p =link_to t('.more_help'), collection_work_help_path(@collection.owner, @collection, @page.work), target: '_blank'
-
-h2.legend = t('.page_labels')
-.page-labels
-  =render :partial => "page_labels/page_labels"
 
 h2.legend =t('.notes_and_questions')
 .page-notes

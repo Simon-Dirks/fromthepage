@@ -404,7 +404,7 @@
     }
   }
   &.vtop > &_group { vertical-align: top; }
-  table.form + & { margin: $gapSize 0 0 0; }
+  .form + & { margin: $gapSize 0 0 0; }
 }
 
 .flex-toolbar {

@@ -42,6 +42,3 @@ en:
       title: Title
     update:
       page_updated: Page updated
-    update_labels:
-      labels_update_failed: "Failed to update page labels"
-      labels_updated: "Successfully updated page labels"

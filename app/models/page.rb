@@ -61,6 +61,9 @@ class Page < ApplicationRecord
   has_many :articles, through: :page_article_links
   has_many :page_versions, -> { order 'page_version DESC' }, :dependent => :destroy
 
+  has_many :page_label_links, dependent: :destroy
+  has_many :labels, through: :page_label_links
+
   belongs_to :current_version, :class_name => 'PageVersion', :foreign_key => 'page_version_id', optional: true
 
   has_and_belongs_to_many :sections

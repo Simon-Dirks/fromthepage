@@ -31,7 +31,7 @@ class PageController < ApplicationController
 
     render :plain => doc.to_xml, :layout => false, :content_type => 'text/xml'
   end
-  
+
   def delete
     @page.destroy
     flash[:notice] = t('.page_deleted')
@@ -91,10 +91,17 @@ class PageController < ApplicationController
   def update
     page = Page.find(params[:id])
     attributes = page_params.to_h.except("base_image")
+
     if page_params[:status].blank?
       attributes['status'] = nil
-    end   
-    page.update_columns(attributes) # bypass page version callbacks
+    end
+
+    page.update(attributes.except(:label_ids))
+
+    if page_params[:label_ids]
+      page.label_ids = page_params[:label_ids]
+    end
+
     flash[:notice] = t('.page_updated')
     page.work.work_statistic.recalculate if page.work.work_statistic
 
@@ -104,7 +111,6 @@ class PageController < ApplicationController
 
     redirect_back fallback_location: page
   end
-
 
   private
 
@@ -142,7 +148,7 @@ class PageController < ApplicationController
   end
 
   def page_params
-    params.require(:page).permit(:page, :title, :base_image, :status, :translation_status)
+    params.require(:page).permit(:page, :title, :base_image, :status, :translation_status, label_ids: [])
   end
 
 end

@@ -13,6 +13,13 @@
           td
             -option_array = Page::MAIN_STATUSES.map {|stat| [t(".page_status_#{stat}"),stat]}
             =f.select :status, options_for_select(option_array, @page.status)
+
+        tr
+          th = f.label :labels, t('.page_labels')
+          td
+            - label_options = Label.all.map { |label| [label.title, label.id] }
+            = f.select :label_ids, options_for_select(label_options, @page.label_ids), {}, multiple: true
+
         -if @work.supports_translation
           tr
             th =f.label :translation_status, t('.page_translation_status')

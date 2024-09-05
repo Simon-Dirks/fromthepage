@@ -55,3 +55,7 @@ en:
       not_saved:
         one: '1 error prohibited the %{resource} from being saved:'
         other: "%{count} errors prohibited the %{resource} from being saved:"
+  page_labels:
+    page_labels:
+      page_labels: "Page Labels"
+      save_label_changes: "Save Labels"

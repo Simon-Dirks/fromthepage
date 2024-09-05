@@ -1,0 +1,9 @@
+= form_for @page, url: page_update_labels_path(@page), html: { multipart: true, method: :patch } do |f|
+  - direction = Rtl.rtl?(@collection.text_language) ? 'rtl' : 'ltr'
+  .form lang="#{@collection.text_language}" dir=direction class=direction
+    .big
+      - label_options = Label.all.map { |label| [label.title, label.id] }
+      = f.select :label_ids, options_for_select(label_options, @page.label_ids), {}, 'data-multi-select': true, size: 1, multiple: true
+
+  .toolbar
+    .toolbar_group = f.submit t('.save_label_changes'), class: 'big'

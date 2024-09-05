@@ -96,11 +96,7 @@ class PageController < ApplicationController
       attributes['status'] = nil
     end
 
-    page.update(attributes.except(:label_ids))
-
-    if page_params[:label_ids]
-      page.label_ids = page_params[:label_ids]
-    end
+    page.update_columns(attributes) # bypass page version callbacks
 
     flash[:notice] = t('.page_updated')
     page.work.work_statistic.recalculate if page.work.work_statistic

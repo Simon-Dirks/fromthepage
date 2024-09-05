@@ -99,10 +99,25 @@
           -else
             =render ({partial: 'transcription_field/field_layout', locals: {collection_id: @collection, transcribe: true}})
 
+= form_for @page, url: page_update_labels_path(@page), html: { multipart: true, method: :patch } do |f|
+  - direction = Rtl.rtl?(@collection.text_language) ? 'rtl' : 'ltr'
+  table.form lang="#{@collection.text_language}" dir=direction class=direction
+
+    tr.big
+      th = f.label :labels, t('.page_labels')
+      td
+        - label_options = Label.all.map { |label| [label.title, label.id] }
+        = f.select :label_ids, options_for_select(label_options, @page.label_ids), {}, 'data-multi-select': true, size: 1, multiple: true
+
+  .toolbar
+    .toolbar_group = f.submit t('.save_label_changes'), class: 'big'
+
 .fgfaded
   ==@work.set_transcription_conventions
   =render :partial => 'shared/markup_help'
   p =link_to t('.more_help'), collection_work_help_path(@collection.owner, @collection, @page.work), target: '_blank'
+
+
 
 h2.legend =t('.notes_and_questions')
 .page-notes

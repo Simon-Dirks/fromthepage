@@ -112,6 +112,23 @@ class PageController < ApplicationController
     redirect_back fallback_location: page
   end
 
+  def update_labels
+    page = Page.find(params[:id])
+    if page.update(page_labels_params)
+      flash[:notice] = t('.labels_updated')
+    else
+      flash[:alert] = t('.labels_update_failed')
+    end
+
+    redirect_back fallback_location: page
+  end
+
+  private
+
+  def page_labels_params
+    params.require(:page).permit(label_ids: [])
+  end
+
   private
 
   def process_uploaded_file(page, image_file)

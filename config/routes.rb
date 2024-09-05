@@ -151,6 +151,7 @@ Fromthepage::Application.routes.draw do
     get 'edit', to: 'page#edit'
     get 'rotate', to: 'page#rotate'
     post 'update', to: 'page#update'
+    patch 'update_labels/:id', to: 'page#update_labels', as: 'update_labels'
     post 'create', to: 'page#create'
   end
 

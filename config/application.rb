@@ -45,6 +45,9 @@ module Fromthepage
         load override
       end
     end
+
+    # Load rake tasks
+    Rails.application.load_tasks
   end
 
 

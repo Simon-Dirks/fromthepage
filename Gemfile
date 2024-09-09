@@ -82,6 +82,7 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   # gem 'capybara-webkit'
+  gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'shoulda'
   gem 'simplecov',      require: false

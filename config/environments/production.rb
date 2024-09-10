@@ -64,7 +64,7 @@ Rails.application.configure do
   }
 
   Ahoy.geocode = false
-  # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
+  config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
 
   RAKE = '/usr/bin/env rake'
   NEATO = '/usr/bin/neato'

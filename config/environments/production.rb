@@ -1,4 +1,5 @@
 Rails.application.configure do
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.cache_classes = true
@@ -9,19 +10,21 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join('tmp', 'caching-dev.txt').exist?
-    config.action_controller.perform_caching = true
-    config.action_controller.enable_fragment_cache_logging = true
+  # if Rails.root.join('tmp', 'caching-dev.txt').exist?
+  #   config.action_controller.perform_caching = true
+  #   config.action_controller.enable_fragment_cache_logging = true
+  #
+  #   config.cache_store = :memory_store
+  #   config.public_file_server.headers = {
+  #     'Cache-Control' => "public, max-age=#{2.days.to_i}"
+  #   }
+  # else
+  config.action_controller.perform_caching = false
 
-    config.cache_store = :memory_store
-    config.public_file_server.headers = {
-      'Cache-Control' => "public, max-age=#{2.days.to_i}"
-    }
-  else
-    config.action_controller.perform_caching = false
+  config.cache_store = :null_store
+  # end
 
-    config.cache_store = :null_store
-  end
+  config.public_file_server.enabled = true
 
   config.active_storage.service = :local
 
@@ -43,7 +46,7 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  config.assets.quiet = true
+  config.assets.quiet = false
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
@@ -76,7 +79,7 @@ Rails.application.configure do
 
   config.i18n.fallbacks = true
   config.force_ssl = true
-    
+
   config.pontiiif_server = 'http://pontiiif.brumfieldlabs.com/'
 
   ## Config for MailCatcher ##

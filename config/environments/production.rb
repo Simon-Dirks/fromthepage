@@ -55,8 +55,8 @@ Rails.application.configure do
   Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
   config.active_record.dump_schema_after_migration = false
-  config.action_mailer.default_url_options = { host: 'fromthepage.com' }
-  config.action_mailer.default_options = { from: 'support@fromthepage.com' }
+  config.action_mailer.default_url_options = { host: 'langer.hum.uu.nl' }
+  config.action_mailer.default_options = { from: 'langer@simondirks.com' }
   config.action_mailer.delivery_method = :postmark
 
   config.action_mailer.postmark_settings = {
@@ -76,7 +76,7 @@ Rails.application.configure do
 
   config.i18n.fallbacks = true
   config.force_ssl = true
-    
+
   config.pontiiif_server = 'http://pontiiif.brumfieldlabs.com/'
 
   ## Config for MailCatcher ##

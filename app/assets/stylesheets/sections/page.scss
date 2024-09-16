@@ -420,7 +420,7 @@
   left: 50%;
   z-index: 1;
   opacity: 0;
-  display: flex;
+  display: none; // flex;
   padding: 0 8px;
   visibility: hidden;
   border-radius: 18px;

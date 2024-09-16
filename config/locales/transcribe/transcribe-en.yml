@@ -20,7 +20,7 @@ en:
       page_labels_title: Card Categories
       page_labels_introduction: Use the dropdown below to keep track of categories at the card-level. As an example, a card that contains details about Langer's life might be labelled "Biographical".
       page_save_labels: Save Categories
-      page_labels_updated: Card categories are successfully updated
+      page_labels_updated: Card categories were successfully updated
       page_labels_update_failed: An error occurred while updating card categories
     display_page:
       alert: This page is being edited by another user!

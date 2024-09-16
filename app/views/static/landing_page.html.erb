@@ -30,22 +30,25 @@
     <!-- Home Count -->
     <section class="home-count">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-6">
-                    <div class="item" data-aos="zoom-in" data-aos-duration="800">
-                        <h4>Transcribers</h4>
-                        <p><%= Deed.where(created_at: (1.year.ago)..).select(:user_id).distinct.count %></p>
-                    </div>
-                </div>
+          <div class="item" data-aos="zoom-in" data-aos-duration="800">
+            <h4>Transcribers</h4>
+            <p><%= Deed.where(created_at: (1.year.ago)..).select(:user_id).distinct.count %></p>
+          </div>
+<!--            <div class="row">-->
+<!--                <div class="col-lg-6 col-md-6 col-6">-->
+<!--                    <div class="item" data-aos="zoom-in" data-aos-duration="800">-->
+<!--                        <h4>Transcribers</h4>-->
+<!--                        <p><%#= Deed.where(created_at: (1.year.ago)..).select(:user_id).distinct.count %></p>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="col-lg-6 col-md-6 col-6">
-                    <div class="item" data-aos="zoom-in" data-aos-duration="1000">
-                        <h4>Pages Transcribed</h4>
-                        <p><%= number_with_delimiter Page.where.not(:status=>nil).count %></p>
-                    </div>
-                </div>
-
-            </div>
+<!--                <div class="col-lg-6 col-md-6 col-6">-->
+<!--                    <div class="item" data-aos="zoom-in" data-aos-duration="1000">-->
+<!--                        <h4>Pages Transcribed</h4>-->
+<!--                        <p><%#= number_with_delimiter Page.where.not(:status=>nil).count %></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </section>
     <!-- Home Count End -->

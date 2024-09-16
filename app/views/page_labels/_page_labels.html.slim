@@ -9,4 +9,4 @@ p = t('transcribe.page_labels.page_labels_introduction')
       = f.select :label_ids, options_for_select(label_options, @page.label_ids), {}, 'data-multi-select': true, size: 1, multiple: true
 
   .toolbar
-    .toolbar_group = f.submit t('transcribe.save_buttons.save_labels')
+    .toolbar_group = f.submit t('transcribe.page_labels.page_save_labels')

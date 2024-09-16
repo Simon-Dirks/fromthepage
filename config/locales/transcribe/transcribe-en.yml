@@ -17,8 +17,9 @@ en:
       uncategorized_subjects: Uncategorized Subjects
       uncategorized_subjects_mentioned: You have uncategorized subjects mentioned in the page transcription. Please review the subjects below and assign the appropriate categories for them.
     page_labels:
-      page_labels_title: Page Labels
-      page_labels_introduction: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse at est quam. Quisque mauris tortor, malesuada eu mauris et, auctor condimentum lectus.
+      page_labels_title: Card Categories
+      page_labels_introduction: Use the dropdown below to keep track of categories at the card-level. As an example, a card that contains details about Langer's life might be labelled "Biographical".
+      page_save_labels: Save Categories
     display_page:
       alert: This page is being edited by another user!
       always_show_fullscreen: Always show in fullscreen

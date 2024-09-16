@@ -111,9 +111,9 @@ class PageController < ApplicationController
   def update_labels
     page = Page.find(params[:id])
     if page.update(page_labels_params)
-      flash[:notice] = t('.labels_updated')
+      flash[:notice] = t('transcribe.page_labels.page_labels_updated')
     else
-      flash[:alert] = t('.labels_update_failed')
+      flash[:alert] = t('transcribe.page_labels.page_labels_update_failed')
     end
 
     redirect_back fallback_location: page

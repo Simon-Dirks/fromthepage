@@ -1,7 +1,7 @@
 p
   b = t('transcribe.page_labels.page_labels_title')
 p = t('transcribe.page_labels.page_labels_introduction')
-= form_for @page, url: page_update_labels_path(@page), html: { multipart: true, method: :patch } do |f|
+= form_for @page, url: update_labels_page_path(@page.id), html: { multipart: true, method: :patch } do |f|
   - direction = Rtl.rtl?(@collection.text_language) ? 'rtl' : 'ltr'
   .form lang="#{@collection.text_language}" dir=direction class=direction
     .big

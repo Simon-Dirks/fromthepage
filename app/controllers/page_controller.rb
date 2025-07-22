@@ -134,7 +134,7 @@ class PageController < ApplicationController
   # end
 
   def update_labels
-    page = Page.find(params[:id])
+    page = Page.find(params[:page_id])
     if page.update(page_labels_params)
       flash[:notice] = t('transcribe.page_labels.page_labels_updated')
     else

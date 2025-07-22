@@ -152,6 +152,7 @@ Fromthepage::Application.routes.draw do
   resources :page, except: [:index, :show, :edit], param: :page_id do
     post :reorder, on: :collection
     post :rotate, on: :collection
+    patch :update_labels, on: :member
   end
 
   scope 'article', as: 'article' do

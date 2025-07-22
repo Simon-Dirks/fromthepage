@@ -80,7 +80,7 @@ Rails.application.configure do
     api_token: ''
   }
 
-  config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
+  # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
 
   UPGRADE_FORM_LINK=''
 #  BILLING_HOST_DEVELOPMENT = 'billing.fromthepage.com'

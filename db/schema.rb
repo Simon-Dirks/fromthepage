@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_31_142026) do
+ActiveRecord::Schema.define(version: 2025_06_11_171909) do
 
-  create_table "ahoy_activity_summaries", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "ahoy_activity_summaries", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.datetime "date"
     t.integer "user_id"
     t.integer "collection_id"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["date", "collection_id", "user_id", "activity"], name: "ahoy_activity_day_user_collection", unique: true
   end
 
-  create_table "ahoy_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "ahoy_events", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "visit_id"
     t.integer "user_id"
     t.string "name"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["target_article_id"], name: "index_article_article_links_on_target_article_id"
   end
 
-  create_table "article_versions", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "article_versions", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.text "source_text"
     t.text "xml_text"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_article_versions_on_user_id"
   end
 
-  create_table "articles", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "articles", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.text "source_text"
     t.datetime "created_on"
@@ -69,17 +69,25 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.string "provenance"
     t.integer "created_by_id"
     t.integer "pages_count", default: 0
+    t.string "birth_date"
+    t.string "death_date"
+    t.string "sex"
+    t.string "race_description"
+    t.text "bibliography"
+    t.string "short_summary"
+    t.string "begun"
+    t.string "ended"
     t.index ["collection_id"], name: "index_articles_on_collection_id"
     t.index ["created_by_id"], name: "fk_rails_35e2f292e3"
   end
 
-  create_table "articles_categories", id: false, charset: "utf8mb3", force: :cascade do |t|
+  create_table "articles_categories", id: false, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "article_id"
     t.integer "category_id"
     t.index ["article_id", "category_id"], name: "index_articles_categories_on_article_id_and_category_id"
   end
 
-  create_table "bulk_exports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "bulk_exports", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "collection_id"
     t.string "status"
@@ -122,17 +130,19 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_bulk_exports_on_work_id"
   end
 
-  create_table "categories", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "categories", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.integer "parent_id"
     t.integer "collection_id"
     t.datetime "created_on"
     t.boolean "gis_enabled", default: false, null: false
+    t.boolean "bio_fields_enabled", default: false
+    t.boolean "org_fields_enabled"
     t.index ["collection_id"], name: "index_categories_on_collection_id"
     t.index ["parent_id"], name: "index_categories_on_parent_id"
   end
 
-  create_table "cdm_bulk_imports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "cdm_bulk_imports", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.boolean "ocr_correction", default: false
     t.string "collection_param", null: false
@@ -142,7 +152,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_cdm_bulk_imports_on_user_id"
   end
 
-  create_table "clientperf_results", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "clientperf_results", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "clientperf_uri_id"
     t.integer "milliseconds"
     t.datetime "created_at", null: false
@@ -150,14 +160,14 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["clientperf_uri_id"], name: "index_clientperf_results_on_clientperf_uri_id"
   end
 
-  create_table "clientperf_uris", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "clientperf_uris", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "uri"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["uri"], name: "index_clientperf_uris_on_uri"
   end
 
-  create_table "collection_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "collection_blocks", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "collection_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -166,19 +176,19 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "fk_rails_c117458532"
   end
 
-  create_table "collection_collaborators", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "collection_collaborators", id: false, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_id"
   end
 
-  create_table "collection_owners", id: false, charset: "utf8mb3", force: :cascade do |t|
+  create_table "collection_owners", id: false, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "collection_reviewers", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "collection_reviewers", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_id"
     t.datetime "created_at", null: false
@@ -187,7 +197,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_collection_reviewers_on_user_id"
   end
 
-  create_table "collections", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "collections", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.integer "owner_user_id"
     t.datetime "created_on"
@@ -224,17 +234,18 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.boolean "messageboards_enabled"
     t.datetime "most_recent_deed_created_at"
     t.boolean "alphabetize_works", default: true
+    t.datetime "featured_at"
     t.index ["owner_user_id"], name: "index_collections_on_owner_user_id"
     t.index ["slug"], name: "index_collections_on_slug", unique: true
     t.index ["thredded_messageboard_group_id"], name: "index_collections_on_thredded_messageboard_group_id"
   end
 
-  create_table "collections_tags", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "collections_tags", id: false, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "collection_id"
     t.integer "tag_id"
   end
 
-  create_table "deeds", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "deeds", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "deed_type", limit: 10
     t.integer "page_id"
     t.integer "work_id"
@@ -249,24 +260,23 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.string "prerender_mailer", limit: 8191
     t.boolean "is_public", default: true
     t.index ["article_id"], name: "index_deeds_on_article_id"
-    t.index ["collection_id", "created_at"], name: "index_deeds_on_collection_id_and_created_at", order: { created_at: :desc }
-    t.index ["collection_id", "deed_type", "created_at"], name: "index_deeds_on_collection_id_and_deed_type_and_created_at", order: { created_at: :desc }
-    t.index ["created_at", "collection_id"], name: "index_deeds_on_created_at_and_collection_id", order: { created_at: :desc }
+    t.index ["collection_id", "created_at"], name: "index_deeds_on_collection_id_and_created_at"
+    t.index ["collection_id", "deed_type", "created_at"], name: "index_deeds_on_collection_id_and_deed_type_and_created_at"
+    t.index ["created_at", "collection_id"], name: "index_deeds_on_created_at_and_collection_id"
     t.index ["note_id"], name: "index_deeds_on_note_id"
     t.index ["page_id"], name: "index_deeds_on_page_id"
-    t.index ["user_id", "created_at"], name: "index_deeds_on_user_id_and_created_at", order: { created_at: :desc }
+    t.index ["user_id", "created_at"], name: "index_deeds_on_user_id_and_created_at"
     t.index ["visit_id"], name: "index_deeds_on_visit_id"
-    t.index ["work_id", "created_at"], name: "index_deeds_on_work_id_and_created_at", order: { created_at: :desc }
-    t.index ["work_id", "deed_type", "user_id", "created_at"], name: "index_deeds_on_work_id_and_deed_type_and_user_id_and_created_at", order: { created_at: :desc }
+    t.index ["work_id", "created_at"], name: "index_deeds_on_work_id_and_created_at"
+    t.index ["work_id", "deed_type", "user_id", "created_at"], name: "index_deeds_on_work_id_and_deed_type_and_user_id_and_created_at"
   end
 
-  create_table "document_set_collaborators", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "document_set_collaborators", id: false, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "document_set_id"
   end
 
-  create_table "document_sets", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.boolean "is_public"
+  create_table "document_sets", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "owner_user_id"
     t.integer "collection_id"
     t.string "title"
@@ -279,18 +289,20 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.string "default_orientation"
     t.integer "next_untranscribed_page_id"
     t.integer "works_count", default: 0
+    t.integer "visibility", default: 0, null: false
+    t.datetime "featured_at"
     t.index ["collection_id"], name: "index_document_sets_on_collection_id"
     t.index ["owner_user_id"], name: "index_document_sets_on_owner_user_id"
     t.index ["slug"], name: "index_document_sets_on_slug", unique: true
   end
 
-  create_table "document_sets_works", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "document_sets_works", id: false, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "document_set_id", null: false
     t.integer "work_id", null: false
     t.index ["work_id", "document_set_id"], name: "index_document_sets_works_on_work_id_and_document_set_id", unique: true
   end
 
-  create_table "document_uploads", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "document_uploads", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_id"
     t.string "file"
@@ -303,7 +315,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_document_uploads_on_user_id"
   end
 
-  create_table "editor_buttons", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "editor_buttons", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "key"
     t.integer "collection_id", null: false
     t.boolean "prefer_html"
@@ -312,7 +324,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["collection_id"], name: "index_editor_buttons_on_collection_id"
   end
 
-  create_table "external_api_requests", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "external_api_requests", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "collection_id", null: false
     t.integer "work_id"
@@ -328,7 +340,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_external_api_requests_on_work_id"
   end
 
-  create_table "facet_configs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "facet_configs", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "label"
     t.string "input_type"
     t.integer "order"
@@ -338,7 +350,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["metadata_coverage_id"], name: "index_facet_configs_on_metadata_coverage_id"
   end
 
-  create_table "flags", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "flags", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "author_user_id"
     t.integer "page_version_id"
     t.integer "article_version_id"
@@ -361,7 +373,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["status"], name: "index_flags_on_status"
   end
 
-  create_table "friendly_id_slugs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "friendly_id_slugs", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "slug", null: false
     t.integer "sluggable_id", null: false
     t.string "sluggable_type", limit: 50
@@ -373,7 +385,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
   end
 
-  create_table "ia_leaves", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "ia_leaves", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "ia_work_id"
     t.integer "page_id"
     t.integer "page_w"
@@ -387,7 +399,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["page_id"], name: "index_ia_leaves_on_page_id"
   end
 
-  create_table "ia_works", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "ia_works", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "detail_url"
     t.integer "user_id"
     t.integer "work_id"
@@ -420,7 +432,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "metadata_coverages", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "metadata_coverages", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "key"
     t.integer "count", default: 0
     t.integer "collection_id"
@@ -428,7 +440,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "metadata_description_versions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "metadata_description_versions", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.text "metadata_description"
     t.integer "user_id", null: false
     t.integer "work_id", null: false
@@ -439,7 +451,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_metadata_description_versions_on_work_id"
   end
 
-  create_table "notes", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "notes", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.text "body", size: :medium, collation: "utf8mb4_unicode_ci"
     t.integer "user_id"
@@ -450,10 +462,12 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.integer "depth"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["collection_id"], name: "fk_rails_7d330fa613"
     t.index ["page_id"], name: "index_notes_on_page_id"
+    t.index ["work_id"], name: "fk_rails_9fa473ac93"
   end
 
-  create_table "notifications", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "notifications", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.boolean "add_as_owner", default: true
     t.boolean "add_as_collaborator", default: true
     t.boolean "note_added", default: true
@@ -465,17 +479,19 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.boolean "add_as_reviewer", default: true
   end
 
-  create_table "page_article_links", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "page_article_links", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "page_id"
     t.integer "article_id"
     t.string "display_text"
     t.datetime "created_on"
     t.string "text_type", default: "transcription"
+    t.integer "work_id"
     t.index ["article_id"], name: "index_page_article_links_on_article_id"
     t.index ["page_id"], name: "index_page_article_links_on_page_id"
+    t.index ["work_id"], name: "index_page_article_links_on_work_id"
   end
 
-  create_table "page_blocks", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "page_blocks", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "controller"
     t.string "view"
     t.string "tag"
@@ -493,7 +509,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "page_versions", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "page_versions", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.text "transcription", size: :medium, collation: "utf8mb4_unicode_ci"
     t.text "xml_transcription", size: :medium, collation: "utf8mb4_unicode_ci"
@@ -509,7 +525,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_page_versions_on_user_id"
   end
 
-  create_table "pages", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "pages", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.text "source_text", size: :medium, collation: "utf8mb4_unicode_ci"
     t.string "base_image"
@@ -542,14 +558,14 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_pages_on_work_id"
   end
 
-  create_table "pages_sections", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "pages_sections", id: false, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "page_id", null: false
     t.integer "section_id", null: false
     t.index ["page_id", "section_id"], name: "index_pages_sections_on_page_id_and_section_id"
     t.index ["section_id", "page_id"], name: "index_pages_sections_on_section_id_and_page_id"
   end
 
-  create_table "quality_samplings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "quality_samplings", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "collection_id", null: false
     t.text "sample_set", size: :medium
@@ -559,7 +575,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_quality_samplings_on_user_id"
   end
 
-  create_table "sc_canvases", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "sc_canvases", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "sc_id"
     t.integer "sc_manifest_id"
     t.integer "page_id"
@@ -577,7 +593,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["sc_manifest_id"], name: "index_sc_canvases_on_sc_manifest_id"
   end
 
-  create_table "sc_collections", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "sc_collections", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "collection_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -588,7 +604,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["collection_id"], name: "index_sc_collections_on_collection_id"
   end
 
-  create_table "sc_manifests", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "sc_manifests", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "work_id"
     t.integer "sc_collection_id"
     t.string "sc_id"
@@ -605,7 +621,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_sc_manifests_on_work_id"
   end
 
-  create_table "search_attempts", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "search_attempts", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "query"
@@ -628,7 +644,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_search_attempts_on_work_id"
   end
 
-  create_table "sections", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "sections", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.integer "depth"
     t.integer "position"
@@ -638,7 +654,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_sections_on_work_id"
   end
 
-  create_table "sessions", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "sessions", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
     t.datetime "created_at", null: false
@@ -647,7 +663,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  create_table "spreadsheet_columns", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "spreadsheet_columns", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "transcription_field_id", null: false
     t.integer "position"
     t.string "label"
@@ -658,7 +674,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["transcription_field_id"], name: "index_spreadsheet_columns_on_transcription_field_id"
   end
 
-  create_table "table_cells", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "table_cells", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "work_id"
     t.integer "page_id"
     t.integer "section_id"
@@ -674,7 +690,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_table_cells_on_work_id"
   end
 
-  create_table "tags", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "tags", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "tag_type"
     t.boolean "canonical"
     t.string "ai_text"
@@ -683,7 +699,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "tex_figures", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "tex_figures", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "page_id"
     t.integer "position"
     t.text "source"
@@ -692,7 +708,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["page_id"], name: "index_tex_figures_on_page_id"
   end
 
-  create_table "thredded_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_categories", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.bigint "messageboard_id", null: false
     t.text "name", null: false
     t.text "description"
@@ -704,14 +720,14 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["name"], name: "thredded_categories_name_ci", length: 191
   end
 
-  create_table "thredded_messageboard_groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_messageboard_groups", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "name"
     t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "thredded_messageboard_notifications_for_followed_topics", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_messageboard_notifications_for_followed_topics", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.bigint "messageboard_id", null: false
     t.string "notifier_key", limit: 90, null: false
@@ -719,7 +735,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id", "messageboard_id", "notifier_key"], name: "thredded_messageboard_notifications_for_followed_topics_unique", unique: true
   end
 
-  create_table "thredded_messageboard_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_messageboard_users", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.bigint "thredded_user_detail_id", null: false
     t.bigint "thredded_messageboard_id", null: false
     t.datetime "last_seen_at", null: false
@@ -728,7 +744,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["thredded_user_detail_id"], name: "fk_rails_06e42c62f5"
   end
 
-  create_table "thredded_messageboards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_messageboards", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.text "name", null: false
     t.text "slug"
     t.text "description"
@@ -744,21 +760,21 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["slug"], name: "index_thredded_messageboards_on_slug", unique: true, length: 191
   end
 
-  create_table "thredded_notifications_for_followed_topics", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_notifications_for_followed_topics", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "notifier_key", limit: 90, null: false
     t.boolean "enabled", default: true, null: false
     t.index ["user_id", "notifier_key"], name: "thredded_notifications_for_followed_topics_unique", unique: true
   end
 
-  create_table "thredded_notifications_for_private_topics", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_notifications_for_private_topics", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "notifier_key", limit: 90, null: false
     t.boolean "enabled", default: true, null: false
     t.index ["user_id", "notifier_key"], name: "thredded_notifications_for_private_topics_unique", unique: true
   end
 
-  create_table "thredded_post_moderation_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_post_moderation_records", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.bigint "post_id"
     t.bigint "messageboard_id"
     t.text "post_content"
@@ -767,11 +783,11 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.integer "moderator_id"
     t.integer "moderation_state", null: false
     t.integer "previous_moderation_state", null: false
-    t.timestamp "created_at", null: false
-    t.index ["messageboard_id", "created_at"], name: "index_thredded_moderation_records_for_display", order: { created_at: :desc }
+    t.timestamp "created_at", default: -> { "current_timestamp()" }, null: false
+    t.index ["messageboard_id", "created_at"], name: "index_thredded_moderation_records_for_display"
   end
 
-  create_table "thredded_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_posts", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.text "content"
     t.string "source", limit: 191, default: "web"
@@ -788,7 +804,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_thredded_posts_on_user_id"
   end
 
-  create_table "thredded_private_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_private_posts", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.text "content"
     t.bigint "postable_id", null: false
@@ -797,7 +813,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["postable_id", "created_at"], name: "index_thredded_private_posts_on_postable_id_and_created_at"
   end
 
-  create_table "thredded_private_topics", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_private_topics", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "last_user_id"
     t.text "title", null: false
@@ -812,7 +828,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["slug"], name: "index_thredded_private_topics_on_slug", unique: true, length: 191
   end
 
-  create_table "thredded_private_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_private_users", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.bigint "private_topic_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -821,14 +837,14 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_thredded_private_users_on_user_id"
   end
 
-  create_table "thredded_topic_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_topic_categories", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.bigint "topic_id", null: false
     t.bigint "category_id", null: false
     t.index ["category_id"], name: "index_thredded_topic_categories_on_category_id"
     t.index ["topic_id"], name: "index_thredded_topic_categories_on_topic_id"
   end
 
-  create_table "thredded_topics", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_topics", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "last_user_id"
     t.text "title", null: false
@@ -851,7 +867,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_thredded_topics_on_user_id"
   end
 
-  create_table "thredded_user_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_user_details", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.datetime "latest_activity_at"
     t.integer "posts_count", default: 0
@@ -866,7 +882,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_thredded_user_details_on_user_id", unique: true
   end
 
-  create_table "thredded_user_messageboard_preferences", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_user_messageboard_preferences", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.bigint "messageboard_id", null: false
     t.boolean "follow_topics_on_mention", default: true, null: false
@@ -876,7 +892,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id", "messageboard_id"], name: "thredded_user_messageboard_preferences_user_id_messageboard_id", unique: true
   end
 
-  create_table "thredded_user_post_notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_user_post_notifications", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.bigint "post_id", null: false
     t.datetime "notified_at", null: false
@@ -884,7 +900,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id", "post_id"], name: "index_thredded_user_post_notifications_on_user_id_and_post_id", unique: true
   end
 
-  create_table "thredded_user_preferences", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_user_preferences", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.boolean "follow_topics_on_mention", default: true, null: false
     t.boolean "auto_follow_topics", default: false, null: false
@@ -893,17 +909,17 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id"], name: "index_thredded_user_preferences_on_user_id", unique: true
   end
 
-  create_table "thredded_user_private_topic_read_states", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_user_private_topic_read_states", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.bigint "postable_id", null: false
     t.integer "unread_posts_count", default: 0, null: false
     t.integer "read_posts_count", default: 0, null: false
     t.integer "integer", default: 0, null: false
-    t.timestamp "read_at", null: false
+    t.timestamp "read_at", default: -> { "current_timestamp()" }, null: false
     t.index ["user_id", "postable_id"], name: "thredded_user_private_topic_read_states_user_postable", unique: true
   end
 
-  create_table "thredded_user_topic_follows", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_user_topic_follows", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.bigint "topic_id", null: false
     t.datetime "created_at", null: false
@@ -911,25 +927,25 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["user_id", "topic_id"], name: "thredded_user_topic_follows_user_topic", unique: true
   end
 
-  create_table "thredded_user_topic_read_states", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "thredded_user_topic_read_states", charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.bigint "messageboard_id", null: false
     t.integer "user_id", null: false
     t.bigint "postable_id", null: false
     t.integer "unread_posts_count", default: 0, null: false
     t.integer "read_posts_count", default: 0, null: false
     t.integer "integer", default: 0, null: false
-    t.timestamp "read_at", null: false
+    t.timestamp "read_at", default: -> { "current_timestamp()" }, null: false
     t.index ["messageboard_id"], name: "index_thredded_user_topic_read_states_on_messageboard_id"
     t.index ["user_id", "messageboard_id"], name: "thredded_user_topic_read_states_user_messageboard"
     t.index ["user_id", "postable_id"], name: "thredded_user_topic_read_states_user_postable", unique: true
   end
 
-  create_table "transcribe_authorizations", id: false, charset: "utf8mb3", force: :cascade do |t|
+  create_table "transcribe_authorizations", id: false, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "work_id"
   end
 
-  create_table "transcription_fields", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "transcription_fields", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "label"
     t.integer "collection_id"
     t.string "input_type"
@@ -945,7 +961,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.string "field_type", default: "transcription"
   end
 
-  create_table "users", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "users", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "login"
     t.string "display_name"
     t.string "real_name"
@@ -992,7 +1008,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
-  create_table "visits", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "visits", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "visit_token"
     t.string "visitor_token"
     t.string "ip"
@@ -1023,7 +1039,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["visit_token"], name: "index_visits_on_visit_token", unique: true
   end
 
-  create_table "work_facets", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "work_facets", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "s0", limit: 512
     t.string "s1", limit: 512
     t.string "s2", limit: 512
@@ -1043,7 +1059,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id"], name: "index_work_facets_on_work_id"
   end
 
-  create_table "work_statistics", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "work_statistics", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.integer "work_id"
     t.integer "transcribed_pages"
     t.integer "annotated_pages"
@@ -1067,7 +1083,7 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
     t.index ["work_id", "line_count"], name: "index_work_statistics_on_work_id_and_line_count"
   end
 
-  create_table "works", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "works", id: :integer, charset: "utf8", collation: "utf8_general_ci", force: :cascade do |t|
     t.string "title"
     t.string "description", limit: 4000
     t.datetime "created_on"
@@ -1127,6 +1143,10 @@ ActiveRecord::Schema.define(version: 2024_07_31_142026) do
   add_foreign_key "facet_configs", "metadata_coverages"
   add_foreign_key "metadata_description_versions", "users"
   add_foreign_key "metadata_description_versions", "works"
+  add_foreign_key "notes", "collections", on_delete: :cascade
+  add_foreign_key "notes", "pages", on_delete: :cascade
+  add_foreign_key "notes", "works", on_delete: :cascade
+  add_foreign_key "page_article_links", "works"
   add_foreign_key "quality_samplings", "collections"
   add_foreign_key "quality_samplings", "users"
   add_foreign_key "spreadsheet_columns", "transcription_fields"

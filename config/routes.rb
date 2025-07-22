@@ -32,12 +32,8 @@ Fromthepage::Application.routes.draw do
 
   iiif_for 'riiif/image', at: '/image-service'
 
-  scope 'notes', as: 'notes' do
-    get 'list(/:collection_id)', to: 'notes#list', as: 'list'
-  end
-  resources :notes
-
-
+  resources :notes, except: [:show]
+  get ':collection_id/notes', to: 'notes#index', as: :collection_notes
 
   scope 'admin', as: 'admin' do
     get '/' => 'admin#index'
@@ -76,6 +72,7 @@ Fromthepage::Application.routes.draw do
       get 'index', to: 'admin#tag_list'
       get ':tag_id', to: 'admin#show_tag', as: 'show'
       get ':source_tag_id/:target_tag_id/merge', to: 'admin#merge_tag', as: 'merge'
+      post 'manual_merge', to: 'admin#merge_tag', as: 'manual_merge'
     end
   end
 
@@ -89,21 +86,21 @@ Fromthepage::Application.routes.draw do
 
   scope 'collection', as: 'collection' do
     get 'new', to: 'collection#new'
-    get 'delete', to: 'collection#delete'
-    get 'show', to: 'collection#show', as: 'show'
+    delete 'delete/:collection_id', to: 'collection#delete', as: :delete_collection
+    get 'show', to: 'collection#show', as: :show
     get 'enable_ocr', to: 'collection#enable_ocr'
     get 'disable_ocr', to: 'collection#disable_ocr'
-    get 'blank_collection', to: 'collection#blank_collection'
+    post 'blank_collection/:collection_id', to: 'collection#blank_collection', as: :blank_collection
     get 'edit', to: 'collection#edit'
-    get ':collection_id/edit_owners', to: 'collection#edit_owners', as: 'edit_owners'
-    get ':collection_id/block_users', to: 'collection#block_users', as: 'block_users'
+    get ':collection_id/edit_owners', to: 'collection#edit_owners', as: :edit_owners
+    get ':collection_id/block_users', to: 'collection#block_users', as: :block_users
     post 'add_reviewer', to: 'collection#add_reviewer'
-    get ':collection_id/edit_reviewers', to: 'collection#edit_reviewers', as: 'edit_reviewers'
+    get ':collection_id/edit_reviewers', to: 'collection#edit_reviewers', as: :edit_reviewers
     post 'remove_reviewer', to: 'collection#remove_reviewer'
     get 'publish_collection', to: 'collection#publish_collection'
-    get ':collection_id/edit_collaborators', to: 'collection#edit_collaborators', as: 'edit_collaborators'
+    get ':collection_id/edit_collaborators', to: 'collection#edit_collaborators', as: :edit_collaborators
     get 'restrict_collection', to: 'collection#restrict_collection'
-    get 'restrict_transcribed', to: 'collection#restrict_transcribed'
+    post 'restrict_transcribed', to: 'collection#restrict_transcribed'
     post 'add_collaborator', to: 'collection#add_collaborator'
     post 'add_block_user', to: 'collection#add_block_user'
     post 'remove_collaborator', to: 'collection#remove_collaborator'
@@ -111,15 +108,14 @@ Fromthepage::Application.routes.draw do
     post 'remove_owner', to: 'collection#remove_owner'
     post 'remove_block_user', to: 'collection#remove_block_user'
     post 'create', to: 'collection#create'
-    get ':collection_id/search_users', to: 'collection#search_users', as: 'search_users'
-    get ':collection_id/new_mobile_user', to: 'collection#new_mobile_user', as: 'new_mobile_user'
-    post ':collection_id/email_link', to: 'collection#email_link', as: 'email_link'
-    match 'update/:id', to: 'collection#update', via: [:get, :post], as: 'update'
+    get ':collection_id/search_users', to: 'collection#search_users', as: :search_users
+    get ':collection_id/new_mobile_user', to: 'collection#new_mobile_user', as: :new_mobile_user
+    post ':collection_id/email_link', to: 'collection#email_link', as: :email_link
+    post 'update/:collection_id', to: 'collection#update', as: :update
 
     scope 'metadata', as: 'metadata' do
-      get ':id/example', to: 'metadata#example', as: :example
-      get ':id/upload', to: 'metadata#upload', as: :upload
-      get 'csv_error', to: 'metadata#csv_error'
+      get ':collection_id/example', to: 'metadata#example', as: :example
+      get ':collection_id/upload', to: 'metadata#upload', as: :upload
       post 'create', to: 'metadata#create'
       post ':id/refresh', to: 'metadata#refresh', as: :refresh
     end
@@ -132,7 +128,7 @@ Fromthepage::Application.routes.draw do
 
   scope 'work', as: 'work' do
     get 'delete', to: 'work#delete'
-    get 'update_featured_page', to: 'work#update_featured_page'
+    post 'update_featured_page', to: 'work#update_featured_page'
     get 'pages_tab', to: 'work#pages_tab'
     get 'edit', to: 'work#edit'
     get ':collection_id/:work_id/edit_scribes', to: 'work#edit_scribes', as: 'edit_scribes'
@@ -144,30 +140,32 @@ Fromthepage::Application.routes.draw do
     get 'document_sets_select', to: 'work#document_sets_select'
   end
 
-  scope 'page', as: 'page' do
-    get 'new', to: 'page#new'
-    get 'delete', to: 'page#delete'
-    get 'reorder_page', to: 'page#reorder_page'
-    get 'edit', to: 'page#edit'
-    get 'rotate', to: 'page#rotate'
-    post 'update', to: 'page#update'
-    patch 'update_labels/:id', to: 'page#update_labels', as: 'update_labels'
-    post 'create', to: 'page#create'
+  # scope 'page', as: 'page' do
+  #   get 'new', to: 'page#new'
+  #   get 'delete', to: 'page#delete'
+  #   get 'reorder_page', to: 'page#reorder_page'
+  #   get 'edit', to: 'page#edit'
+  #   get 'rotate', to: 'page#rotate'
+  #   post 'update', to: 'page#update'
+  #   patch 'update_labels/:id', to: 'page#update_labels', as: 'update_labels'
+  #   post 'create', to: 'page#create'
+  resources :page, except: [:index, :show, :edit], param: :page_id do
+    post :reorder, on: :collection
+    post :rotate, on: :collection
   end
 
   scope 'article', as: 'article' do
     get 'list', to: 'article#list'
     get 'tooltip', to: 'article#tooltip'
-    get 'delete', to: 'article#delete'
+    delete 'delete', to: 'article#delete'
     get 'show', to: 'article#show'
     post 'combine_duplicate', to: 'article#combine_duplicate'
-    post 'article_category', :to => 'article#article_category'
+    post 'article_category', to: 'article#article_category'
   end
 
   scope 'export', as: 'export' do
     get '/', to: 'export#index'
     get 'export_work', to: 'export#export_work'
-    get 'list', to: 'export#list'
     get 'export_all_works', to: 'export#export_all_works'
     post ':collection_id/:work_id/printable', to: 'export#printable', as: 'printable'
     get 'show', to: 'export#show'
@@ -207,6 +205,20 @@ Fromthepage::Application.routes.draw do
     match 'confirm_import', to: 'ia#confirm_import', via: [:get, :post]
   end
 
+  if Rails.application.config.upload_host.present?
+    constraints subdomain: Rails.application.config.upload_host do
+      scope 'dashboard', as: 'dashboard' do
+        post 'new_upload', to: 'dashboard#new_upload'
+      end
+    end
+  else
+    scope 'dashboard', as: 'dashboard' do
+      post 'new_upload', to: 'dashboard#new_upload'
+    end
+  end
+
+
+
   scope 'dashboard', as: 'dashboard' do
     get '/' => 'dashboard#index'
     get 'owner' => 'dashboard#owner'
@@ -220,17 +232,19 @@ Fromthepage::Application.routes.draw do
     get 'dashboard/download_hours_letter/:start_date/:end_date/:time_duration', to: 'dashboard#download_hours_letter', as: 'download_hours_letter', format: :pdf
   end
 
-  scope 'search_attempt', as: 'search_attempt' do
-    get 'create', to: 'search_attempt#create'
-    get 'click', to: 'search_attempt#click'
-    get ':id', to: 'search_attempt#show', as: 'show'
+  resources :search_attempt, path: 'search_attempt', only: [:show, :create] do
+    get :click, to: 'search_attempt#click', on: :collection
   end
 
   scope 'category', as: 'category' do
     get 'edit', to: 'category#edit'
     get 'add_new', to: 'category#add_new'
+    get 'enable_bio_fields', to: 'category#enable_bio_fields'
+    get 'disable_bio_fields', to: 'category#disable_bio_fields'
     get 'enable_gis', to: 'category#enable_gis'
     get 'disable_gis', to: 'category#disable_gis'
+    get 'enable_org_fields', to: 'category#enable_org_fields'
+    get 'disable_org_fields', to: 'category#disable_org_fields'
     get 'delete', to: 'category#delete'
     post 'create', to: 'category#create'
     patch 'update', :to => 'category#update'
@@ -316,13 +330,12 @@ Fromthepage::Application.routes.draw do
   end
 
   scope 'document_sets', as: 'document_sets' do
-    get 'restrict_set', to: 'document_sets#restrict_set'
     get 'destroy', to: 'document_sets#destroy'
-    get 'publish_set', to: 'document_sets#publish_set'
     post 'remove_set_collaborator', to: 'document_sets#remove_set_collaborator'
     post 'assign_to_set', to: 'document_sets#assign_to_set'
     post 'add_set_collaborator', to: 'document_sets#add_set_collaborator'
     get 'search_collaborators', to: 'document_sets#search_collaborators'
+    post 'update_works', to: 'document_sets#update_works'
   end
 
   scope 'transcription_field', as: 'transcription_field' do
@@ -350,8 +363,7 @@ Fromthepage::Application.routes.draw do
 
   get 'dashboard_role' => 'dashboard#dashboard_role'
   get 'guest_dashboard' => 'dashboard#guest'
-  get 'oldfindaproject', to: 'dashboard#landing_page', as: :old_landing_page
-  get 'findaproject', to: 'dashboard#new_landing_page', as: :landing_page
+  get 'findaproject', to: 'dashboard#landing_page', as: :landing_page
   get 'collections', to: 'dashboard#collections_list', as: :collections_list
   get 'paged_search/:id', to: 'display#paged_search', as: :paged_search
   get 'browse_tag/:ai_text', to: 'dashboard#browse_tag', as: :browse_tag
@@ -367,7 +379,7 @@ Fromthepage::Application.routes.draw do
     namespace :v1 do
       get 'bulk_export', to: 'bulk_export#index'
       get 'bulk_export/:collection_slug', to: 'bulk_export#index'
-      post 'bulk_export/:collection_slug', to: 'bulk_export#start'
+      post 'bulk_export/:collection_slug', to: 'bulk_export#start', as: 'bulk_export_start'
       get 'bulk_export/:bulk_export_id/status', to: 'bulk_export#status', as: 'bulk_export_status'
       get 'bulk_export/:bulk_export_id/download', to: 'bulk_export#download', as: 'bulk_export_download'
     end
@@ -459,16 +471,20 @@ Fromthepage::Application.routes.draw do
   get '/digital_scholarship', to: 'static#digital_scholarship', as: :digital_scholarship
   get '/state_archives', to: 'static#state_archives', as: :state_archives
 
-
   resources :document_sets, except: [:show, :create, :edit]
+
+  get '/:user_id/tagged/:ai_text', to: 'user#profile', as: :tagged_user_profile
 
   scope ':user_slug' do
     get 'update_profile', to: 'user#update_profile', as: :update_profile
+    get 'search', to: 'user#search', as: :owner_search
 
     resources :collection, path: '', only: [:show] do
       get 'page-notes', to: 'notes#discussions', as: 'page_discussions'
       get 'statistics', as: :statistics, to: 'statistics#collection'
       get 'settings', as: :settings, to: 'document_sets#settings'
+      get 'settings/privacy', as: :settings_privacy, to: 'document_sets#settings_privacy'
+      get 'settings/works', as: :settings_works, to: 'document_sets#settings_works'
       get 'settings/:document_set_id/edit_set_collaborators', to: 'document_sets#edit_set_collaborators', as: 'edit_set_collaborators'
       get 'subjects', as: :subjects, to: 'article#list'
       get 'review', as: :review, to: 'collection#reviewer_dashboard'
@@ -493,7 +509,8 @@ Fromthepage::Application.routes.draw do
       get 'edit_fields', as: :edit_fields, to: 'transcription_field#edit_fields'
       get 'edit_metadata_fields', as: :edit_metadata_fields, to: 'transcription_field#edit_metadata_fields'
       get 'facets'
-      post 'search'
+      post 'search', to: 'collection#facet_search', as: 'facet_search'
+      get 'search', to: 'collection#search', as: 'search'
 
       get 'edit', on: :member
       get 'edit/tasks', on: :member, to: 'collection#edit_tasks'
@@ -510,8 +527,6 @@ Fromthepage::Application.routes.draw do
       get 'needs_review', as: :needs_review, to: 'collection#needs_review_pages'
       get 'needs_metadata', as: :needs_metadata, to: 'collection#needs_metadata_works'
       get 'start_transcribing', as: :start_transcribing, to: 'collection#start_transcribing'
-
-
 
       #work related routes
       #have to use match because it must be both get and post
@@ -541,7 +556,7 @@ Fromthepage::Application.routes.draw do
       get ':work_id/export/plaintext/emended', as: 'work_export_plaintext_emended', to: 'export#work_plaintext_emended'
       get ':work_id/export/plaintext/translation/verbatim', as: 'work_export_plaintext_translation_verbatim', to: 'export#work_plaintext_translation_verbatim'
       get ':work_id/export/plaintext/translation/emended', as: 'work_export_plaintext_translation_emended', to: 'export#work_plaintext_translation_emended'
-
+      get ':work_id/search', to: 'work#search', as: 'work_search'
       #page related routes
       get ':work_id/display/:page_id', as: 'display_page', to: 'display#display_page'
       get ':work_id/transcribe/:page_id', as: 'transcribe_page', to: 'transcribe#display_page'
@@ -568,6 +583,7 @@ Fromthepage::Application.routes.draw do
 
       #article related routes
       get 'article/:article_id', to: 'article#show', as: 'article_show'
+      get 'article/:article_id/relationship_graph', to: 'article#relationship_graph', as: 'article_relationship_graph'
       get 'article/:article_id/edit', to: 'article#edit', as: 'article_edit'
       get 'article_version/:article_id', to: 'article_version#list', as: 'article_version'
       patch 'article/update/:article_id', to: 'article#update', as: 'article_update'

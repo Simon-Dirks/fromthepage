@@ -55,27 +55,13 @@ Rails.application.configure do
   Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
   config.active_record.dump_schema_after_migration = false
-  config.action_mailer.default_url_options = { host: 'langer.hum.uu.nl' }
-  config.action_mailer.default_options = { from: 'langer@simondirks.com' }
-  config.action_mailer.delivery_method = :postmark
-
-  config.action_mailer.postmark_settings = {
-    api_token: ''
-  }
-
-  Ahoy.geocode = false
-  config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
-
-  RAKE = '/usr/bin/env rake'
-  NEATO = '/usr/bin/neato'
-  TEX_PATH='/usr/local/texlive/2017/bin/x86_64-linux/'
-  UPGRADE_FORM_LINK='https://app.bentonow.com/f/6247d0278bfbafc3ef75b753f26a46d2/red-tree-885/'
-#  BILLING_HOST_DEVELOPMENT = 'billing.fromthepage.com'
-#  Disable IIIF search while Pontiiif is down
-#  config.pontiiif_server = 'http://pontiiif.brumfieldlabs.com/'
 
   config.i18n.fallbacks = true
   config.force_ssl = true
+    
+  NEATO = '/usr/bin/neato'
+  RAKE = '/usr/bin/env rake'
+  TEX_PATH='/usr/local/texlive/2017/bin/x86_64-linux/'
 
   config.pontiiif_server = 'http://pontiiif.brumfieldlabs.com/'
 
@@ -83,4 +69,22 @@ Rails.application.configure do
   # Install mailcatcher locally on your machine 'gem install mailcatcher'
   # Run 'mailcatcher' in the terminal to start the server
   # Open 'http://localhost:1080/' in your browser to see mail sent
+
+  Ahoy.geocode = false
+
+  config.action_mailer.default_url_options = { host: 'langer.hum.uu.nl' }
+  config.action_mailer.default_options = { from: 'noreply@langer.hum.uu.nl' }
+  config.action_mailer.delivery_method = :postmark
+
+  config.action_mailer.postmark_settings = {
+    api_token: ''
+  }
+
+  config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
+
+  UPGRADE_FORM_LINK=''
+#  BILLING_HOST_DEVELOPMENT = 'billing.fromthepage.com'
+#  Disable IIIF search while Pontiiif is down
+#  config.pontiiif_server = 'http://pontiiif.brumfieldlabs.com/'
+
 end

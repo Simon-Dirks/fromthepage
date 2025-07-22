@@ -56,14 +56,22 @@
 #
 class BulkExport < ApplicationRecord
   require 'zip'
+
   include ExportHelper, ExportService
-  store :report_arguments, accessors: [:preserve_linebreaks, :include_metadata, :include_contributors, :start_date, :end_date], coder: JSON
+
+  store :report_arguments, accessors: [
+    :preserve_linebreaks,
+    :include_metadata,
+    :include_contributors,
+    :start_date,
+    :end_date,
+    :include_notes
+  ], coder: JSON
 
   belongs_to :user
   belongs_to :collection, optional: true
   belongs_to :document_set, optional: true
   belongs_to :work, optional: true
-
 
   module Status
     NEW = 'new'
@@ -79,7 +87,6 @@ class BulkExport < ApplicationRecord
     WORK_THEN_FORMAT = 'by_work'
   end
 
-
   def work_level?
     self.attributes.detect{|k,v| k.match(/_work/) && v==true }
   end
@@ -87,7 +94,6 @@ class BulkExport < ApplicationRecord
   def page_level?
     self.attributes.detect{|k,v| k.match(/_page/) && v==true }
   end
-
 
   def export_to_zip
     self.status = Status::PROCESSING
@@ -111,14 +117,12 @@ class BulkExport < ApplicationRecord
 
       self.status = Status::FINISHED
       self.save
-
     rescue => ex
       self.status = Status::ERROR
       self.save
 
       raise
     end
-
   end
 
   def clean_zip_file
@@ -135,9 +139,13 @@ class BulkExport < ApplicationRecord
     rake_call = "#{RAKE} fromthepage:process_bulk_export[#{self.id}]  --trace >> #{log_file} 2>&1 &"
 
     # Nice-up the rake call if settings are present
-    rake_call = "nice -n #{NICE_RAKE_LEVEL} " << rake_call if NICE_RAKE_ENABLED
+    rake_call = "nice -n #{NICE_RAKE_LEVEL} stdbuf -oL " << rake_call if NICE_RAKE_ENABLED
 
     logger.info rake_call
+    system('env > /home/fromthepage/environment_logging/env_from_application.log')
+    Rails.logger.info("whoami is \n" + `whoami`)
+    Rails.logger.info("pwd is \n" + `pwd`)
+    Rails.logger.info("ulimit -a is \n" + `/bin/bash -c "ulimit -a"`)
     system(rake_call)
   end
 
@@ -163,6 +171,5 @@ class BulkExport < ApplicationRecord
   def zip_file_name
     File.join(zip_file_path, "export_#{self.id}.zip")
   end
-
 
 end

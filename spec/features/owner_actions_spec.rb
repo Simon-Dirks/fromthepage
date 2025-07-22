@@ -91,7 +91,7 @@ describe "owner actions", :order => :defined do
     page.find(:css, '#document-upload').click
     page.select 'Add New Collection', from: 'document_upload_collection_id'
 
-    within(page.find('.litebox-embed')) do
+    within(page.find('.litebox-embed', wait: 5)) do
       expect(page).to have_content('Create New Collection')
       fill_in 'collection_title', with: col_title
       page.execute_script("$('#create-collection').click()")
@@ -238,6 +238,7 @@ describe "owner actions", :order => :defined do
 
     visit dashboard_owner_path
     page.find('.maincol').find('a', text: @collection.title).click
+    page.click_link('Show All')
     page.find('.collection-works').find('a', text: @title).click
     page.find('.tabs').click_link('Settings')
     expect(page).to have_content(@title)
@@ -268,7 +269,7 @@ describe "owner actions", :order => :defined do
     first('.select2-container', minimum: 1).click
     find('.select2-dropdown input.select2-search__field').send_keys("Arabic", :enter)
     expect(page).to have_content('Transcription type')
-    expect(Collection.find(3).text_language).to eq 'ara'
+    expect(@rtl_collection.reload.text_language).to eq 'ara'
   end
 
   it "checks rtl transcription page views" do

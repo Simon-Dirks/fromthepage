@@ -283,7 +283,7 @@ describe "editor actions" , :order => :defined do
       expect(page).not_to have_selector('a', text: 'Undo Login As')
     end
 
-    it "adds a note" do
+    it "adds a note", js: true do
       visit collection_transcribe_page_path(@collection.owner, @collection, @page.work, @page)
       fill_in 'Write a new note or ask a question...', with: "Test note"
       find('#save_note_button').click
@@ -299,7 +299,7 @@ describe "editor actions" , :order => :defined do
       expect(page).to have_selector('.user-bubble_actions > a[title="Delete"]')
     end
 
-    it "tries to save transcription with unsaved note", :js => true do
+    it "tries to save transcription with unsaved note", js: true do
       col = Collection.second
       test_page = col.works.first.pages.first
       visit collection_transcribe_page_path(col.owner, col, test_page.work, test_page)
@@ -329,9 +329,10 @@ describe "editor actions" , :order => :defined do
       test_page = col.works.first.pages.first
       visit collection_transcribe_page_path(col.owner, col, test_page.work, test_page)
       title = test_page.notes.last.id
+      note_id = test_page.notes.last.id
       page.find('.user-bubble_content', text: "Test two")
       accept_alert do
-        page.click_link('', :href => "/notes/#{title}")
+        find("form[data-turbo='true'][data-turbo-confirm='Are you sure you want to delete this note?'][action='/notes/#{note_id}'] button[type='submit']").click
       end
       sleep(3)
       expect(Note.find_by(id: title)).to be_nil
@@ -430,7 +431,7 @@ describe "editor actions" , :order => :defined do
     end
 
 
-    it "adds an abusive note" do
+    it "adds an abusive note", js: true do
       flag_count = Flag.count
       visit collection_transcribe_page_path(@collection.owner, @collection, @page.work, @page)
       fill_in 'Write a new note or ask a question...', with: "Visit <a href=\"www.spam.com\">our store!</a>"

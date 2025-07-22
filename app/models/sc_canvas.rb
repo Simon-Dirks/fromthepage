@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: sc_canvases
+#
+#  id                 :integer          not null, primary key
+#  annotations        :text(16777215)
+#  height             :integer
+#  sc_canvas_label    :string(255)
+#  sc_service_context :string(255)
+#  width              :integer
+#  created_at         :datetime
+#  updated_at         :datetime
+#  page_id            :integer
+#  sc_canvas_id       :string(255)
+#  sc_id              :string(255)
+#  sc_manifest_id     :integer
+#  sc_resource_id     :string(255)
+#  sc_service_id      :string(255)
+#
+# Indexes
+#
+#  index_sc_canvases_on_page_id         (page_id)
+#  index_sc_canvases_on_sc_manifest_id  (sc_manifest_id)
+#
 class ScCanvas < ApplicationRecord
   self.table_name = "sc_canvases"
 
@@ -22,6 +46,20 @@ class ScCanvas < ApplicationRecord
       "#{sc_service_id}/full/full/0/default.jpg"
     else
       sc_resource_id
+    end
+  end
+
+  def iiif_image_info_url
+    if sc_service_id
+      service_id = sc_service_id.sub(/\/$/,'')
+      "#{service_id}/info.json"
+    else
+      # special handling for NARA images -- treat them as an image
+      if sc_resource_id.include?('catalog.archives.gov')
+        {type: 'image', url: sc_resource_id}.to_json
+      else
+        self.sc_resource_id.sub(/full\/\w+\/\w+\/.*/, 'info.json')
+      end
     end
   end
 

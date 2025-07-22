@@ -41,7 +41,7 @@
                 <div class="col-lg-6 col-md-6 col-6">
                     <div class="item" data-aos="zoom-in" data-aos-duration="1000">
                         <h4>Pages Transcribed</h4>
-                        <p><%= number_with_delimiter Page.where.not(:status=>nil).count %></p>
+                        <p><%= number_with_delimiter Page.where.not(status: :new).count %></p>
                     </div>
                 </div>
 

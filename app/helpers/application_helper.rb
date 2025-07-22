@@ -1,5 +1,5 @@
 module ApplicationHelper
-  
+
   def contact_form_token
     ("#{Time.now.year}#{Time.now.month}#{Time.now.day}".to_i * 32 / 7)
   end
@@ -45,7 +45,7 @@ module ApplicationHelper
   end
 
   def profile_picture(user, gravatar_size = nil)
-    render({ 
+    render({
               :partial => 'shared/profile_picture',
               :locals => { :user => user, :gravatar_size => gravatar_size }
       })
@@ -95,13 +95,12 @@ module ApplicationHelper
       condition << options[:not_user_id]
     end
 
-
     suppress_collection = false
     if options[:collection]
       deeds = @collection.deeds.active.where(condition).order('deeds.created_at DESC').limit(limit)
       suppress_collection = true
     else
-      #restricting to visible collections first speeds up the query
+      # restricting to visible collections first speeds up the query
       limited = Deed.where(is_public: true)
       if options[:owner]
         owner = User.friendly.find(options[:owner].id)
@@ -113,10 +112,10 @@ module ApplicationHelper
       end
     end
     options[:suppress_collection] = suppress_collection
-    render({ :partial => 'deed/deeds', :locals => { :limit => limit, :deeds => deeds, :options => options} })
+    render partial: 'deed/deeds', locals: { limit: limit, deeds: deeds, options: options }
   end
 
-  def show_prerender(prerender, locale) 
+  def show_prerender(prerender, locale)
     begin
       prerenders = JSON.parse(prerender)
       unless rendered = prerenders[locale.to_s] # show prerender in specified locale
@@ -147,7 +146,7 @@ module ApplicationHelper
     end
   end
 
-  def work_title 
+  def work_title
     if @document_set
       "#{@work.title} (#{@document_set.title})"
     elsif @collection
@@ -159,15 +158,15 @@ module ApplicationHelper
 
   def language_attrs(collection)
     direction = Rtl.rtl?(collection.text_language) ? 'rtl' : 'ltr'
-    
+
     language = ISO_639.find_by_code(collection.text_language)
     language = ISO_639.find_by_code('en') if language.nil?
 
     display_language = language.alpha2
 
     attrs = {
-      'lang'=>"#{display_language}", 
-      'dir'=>"#{direction}", 
+      'lang'=>"#{display_language}",
+      'dir'=>"#{direction}",
       'class'=>"#{direction}"
     }
     return attrs
@@ -223,8 +222,8 @@ module ApplicationHelper
 
   def target_collection_options(default)
     option_data = {}
-    current_user.collections.sort { |a,b| a.title <=> b.title }.each do |c| 
-      option_data[c.title]=c.id 
+    current_user.collections.sort { |a,b| a.title <=> b.title }.each do |c|
+      option_data[c.title]=c.id
       c.document_sets.sort { |a,b| a.title <=> b.title }.each do |set|
         option_data[" -- #{set.title}"] = "D#{set.id}"
       end
@@ -238,7 +237,7 @@ module ApplicationHelper
       end
     else
       options_for_select(option_data)
-    end      
+    end
   end
 
   def feature_enabled?(feature)
@@ -249,9 +248,9 @@ module ApplicationHelper
   def to_snippet(intro_block)
     # remove style tag, Loofah.fragment.text doesn't do this (strip_tags does)
     doc = Nokogiri::HTML(intro_block)
-    doc.xpath('//style').each { |n| n.remove } 
+    doc.xpath('//style').each { |n| n.remove }
     # strip tags and truncate
-    truncate(Loofah.fragment(doc.to_s).text(encode_special_chars: false), length: 300, separator: ' ') || '' 
+    truncate(Loofah.fragment(doc.to_s).text(encode_special_chars: false), length: 300, separator: ' ') || ''
   end
 
   def timeago(time, options = {})
@@ -261,5 +260,13 @@ module ApplicationHelper
 
   def mobile_device?
     !!(request.user_agent =~ /Mobile/)
+  end
+
+  def pagination_options_collection
+    [
+      ['50', 50],
+      ['200', 200],
+      [I18n.t('will_paginate.all'), -1]
+    ]
   end
 end

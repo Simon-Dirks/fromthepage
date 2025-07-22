@@ -74,15 +74,14 @@ fr:
       volunteer_text: Chaque bénévole contribue à rendre l’histoire plus accessible. Nous apprécions la contribution de %{user_display_name} à notre effort de crowdsourcing !
       worked_on_collections: "%{user_name} a travaillé sur les collections suivantes par les institutions suivantes :"
     landing_page:
-      all_collections: Toutes les collections
-      more: Voir plus
-      next_image: Image suivante
-      previous_image: Image précédente
-      recent_activity: Activité récente
-      search: Chercher
+      by: " par "
+      institutions: Institutions
+      more: plus
+      new_projects: Nouveaux projets
+      search: Recherche
       search_for_collections: Rechercher des collections
-      search_for_collections_or_owners: Rechercher des projets
-      transcribe_a_page: Transcrire une page
+      search_org: Recherche au sein de l'organisation
+      search_org_label: Rechercher du contenu publié par cette organisation...
     new_upload:
       document_uploaded: Le document a été téléchargé et sera traité sous peu. Nous vous enverrons un e-mail à %{email} lorsque vous serez prêt.
       reload_this_page: Le document a été téléchargé et sera traité sous peu. Rechargez cette page dans quelques minutes pour la voir.
@@ -138,8 +137,8 @@ fr:
       since: depuis %{date}
       start_a_project: Démarrer un projet
       summary: Sommaire
-      to_upgrade_contact: Pour mettre à niveau, contactez support@fromthepage.com
       total_pages: 'Nombre total de pages : %{pages}'
+      upgrade: Mise à niveau
       work:
         one: Œuvre
         other: Œuvres
@@ -157,7 +156,7 @@ fr:
       import_form_message: En utilisant ce formulaire, vous pouvez importer vos images de page dans FromThePage. Vous devez sélectionner une collection cible dans laquelle importer et joindre un fichier ZIP ou PDF contenant des images de page à utiliser pour votre projet.
       page_image_guidelines: Directives relatives aux images de page
       select_a_collection: "- Sélectionner une collection -"
-      to_specify_metadata: Pour spécifier les métadonnées avec les images, incluez un fichier %{link} dans chaque dossier en spécifiant les champs pour l'œuvre.
+      to_specify_metadata: Pour spécifier les métadonnées, vous pouvez télécharger une feuille de calcul après le téléchargement des images ou vous pouvez inclure un fichier %{link} dans chaque dossier spécifiant les champs du travail.
       trial_accounts_are_limited: Les comptes d'essai sont limités à 200 pages. Veuillez contacter support@fromthepage.com pour mettre à niveau votre compte.
       upload_file: Téléverser un fichier
       upload_pdf_or_zip_file: Téléverser un fichier PDF ou ZIP

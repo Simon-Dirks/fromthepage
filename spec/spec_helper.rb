@@ -1,12 +1,12 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+ENV['RAILS_ENV'] ||= 'test'
+require_relative 'support/simplecov_profile'
+
+require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'factory_bot'
 require 'webmock/rspec'
 require 'database_cleaner'
-require 'coveralls'
-Coveralls.wear!
+require 'with_model'
 
 DatabaseCleaner.strategy = :transaction
 
@@ -21,11 +21,15 @@ WebMock.allow_net_connect!
 # option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
+# Require lib files
+Dir[Rails.root.join('lib/**/*.rb')].each { |f| require f }
+
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 #ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  config.extend WithModel
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -85,9 +89,10 @@ RSpec.configure do |config|
 end
 
 Capybara.configure do |config|
-  config.asset_host = "http://localhost:3000"
+  config.asset_host = 'http://localhost:3000'
   config.raise_server_errors = false
 end
+
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

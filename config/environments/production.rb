@@ -55,6 +55,7 @@ Rails.application.configure do
   Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
   config.active_record.dump_schema_after_migration = false
+
   config.i18n.fallbacks = true
   config.force_ssl = true
     
@@ -70,4 +71,20 @@ Rails.application.configure do
   # Open 'http://localhost:1080/' in your browser to see mail sent
 
   Ahoy.geocode = false
+
+  config.action_mailer.default_url_options = { host: 'langer.hum.uu.nl' }
+  config.action_mailer.default_options = { from: 'noreply@langer.hum.uu.nl' }
+  config.action_mailer.delivery_method = :postmark
+
+  config.action_mailer.postmark_settings = {
+    api_token: ''
+  }
+
+  config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
+
+  UPGRADE_FORM_LINK=''
+#  BILLING_HOST_DEVELOPMENT = 'billing.fromthepage.com'
+#  Disable IIIF search while Pontiiif is down
+#  config.pontiiif_server = 'http://pontiiif.brumfieldlabs.com/'
+
 end

@@ -33,6 +33,8 @@ module Fromthepage
     config.i18n.fallbacks = true
     config.i18n.fallbacks = [:en]
 
+    # override this in environment to set a different host for uploads
+    config.upload_host=nil
 
 
   # load overrides for Thredded and other engines
@@ -45,8 +47,8 @@ module Fromthepage
         load override
       end
     end
-
   end
+
 
   #uncomment for development of SSO
   #Rails.application.config.action_controller.forgery_protection_origin_check=false

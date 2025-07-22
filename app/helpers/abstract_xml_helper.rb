@@ -3,12 +3,44 @@ module AbstractXmlHelper
 
   SANITIZE_ALLOWED_TAGS = %w(table tr td th thead tbody tfoot caption colgroup col a abbr acronym address b big blockquote br cite code del dfn div em font h1 h2 h3 h4 h5 h6 hr i img ins kbd li ol p pre q s samp small span strike strong sub sup tt u ul var time)
 
+  SANITIZE_ALLOWED_ATTRIBUTES = [
+    'abbr',
+    'alt',
+    'break',
+    'class',
+    'data-controller',
+    'data-tooltip',
+    'datetime',
+    'depth',
+    'expan',
+    'height',
+    'href',
+    'id',
+    'marker',
+    'name',
+    'orig',
+    'position',
+    'rend',
+    'src',
+    'style',
+    'target',
+    'target_id',
+    'target_title',
+    'time',
+    'title',
+    'type',
+    'when',
+    'width'
+  ]
+
+  SANITIZE_SINGLE_QUOTE_TAGS = %w(b strong i em u s mark q code pre kbd)
+
   def source_to_html(source)
-    html = source.gsub(/\n/, "<br/>")
+    html = source.gsub(/\n/, '<br/>')
     return html
   end
 
-  def xml_to_html(xml_text, preserve_lb=true, flatten_links=false, collection=nil, highlight_article_id=nil)
+  def xml_to_html(xml_text, preserve_lb=true, flatten_links=false, collection=nil, highlight_article_id=nil, suppress_tooltips=false)
     return "" if xml_text.blank?
     xml_text.gsub!(/\n/, "")
     xml_text.gsub!('ISO-8859-15', 'UTF-8')
@@ -17,18 +49,17 @@ module AbstractXmlHelper
       xml_text.gsub!("<lb break='no'/> ", "-<br />")
     end
 
-    @collection ||= collection
+    collection ||= @collection
 
     doc = REXML::Document.new(xml_text)
     #unless subject linking is disabled, do this
-    unless @collection.subjects_disabled
+    unless collection.subjects_disabled
       doc.elements.each("//link") do |e|
-
         title = e.attributes['target_title']
         id = e.attributes['target_id']
         # first find the articles
         anchor = REXML::Element.new("a")
-        #anchor.text = display_text
+        anchor.add_attribute("title", title)
         if id
           if flatten_links
             if flatten_links == :jekyll
@@ -37,7 +68,10 @@ module AbstractXmlHelper
               anchor.add_attribute("href", "#article-#{id}")
             end
           else
-            anchor.add_attribute("data-tooltip", url_for(:controller => 'article', :action => 'tooltip', :article_id => id, :collection_id => @collection.slug))
+            unless suppress_tooltips
+              anchor.add_attribute('data-controller', 'tooltip')
+              anchor.add_attribute('data-tooltip', article_tooltip_url(article_id: id, collection_id: collection.slug))
+            end
             anchor.add_attribute("href", url_for(:controller => 'article', :action => 'show', :article_id => id))
             if highlight_article_id && id == highlight_article_id
               anchor.add_attribute("class", "highlighted")  # Add the class attribute for highlighting
@@ -47,7 +81,6 @@ module AbstractXmlHelper
           # preview mode for this link
           anchor.add_attribute("href", "#")
         end
-        anchor.add_attribute("title", title)
         e.children.each { |c| anchor.add(c) }
         e.replace_with(anchor)
       end
@@ -155,7 +188,7 @@ module AbstractXmlHelper
       # convert to a span
       depth = e.attributes["depth"]
       title = e.attributes["title"]
-      
+
       span = e
       e.name = 'span'
       span.add_attribute('class', "depth#{depth}")
@@ -163,7 +196,7 @@ module AbstractXmlHelper
 
     doc.elements.each("//head") do |e|
       # convert to a span
-      depth = 2      
+      depth = 2
       span = e
       e.name = 'span'
       span.add_attribute('class', "depth#{depth}")
@@ -181,7 +214,7 @@ module AbstractXmlHelper
         span.name='i'
         span.attributes.delete 'rend'
       when 'bold'
-        span.name='i'
+        span.name='b'
       when 'sub'
         span.name='sub'
       when 'str'
@@ -190,12 +223,16 @@ module AbstractXmlHelper
     end
 
     doc.elements.each("//add") do |e|
-      e.name='span'
+      e.name='ins'
+      e.add_attribute('class', "addition")
+    end
+
+    doc.elements.each("//ins") do |e|
       e.add_attribute('class', "addition")
     end
 
     doc.elements.each("//figure") do |e|
-      rend = e.attributes["rend"]
+      rend = e.attributes["rend"] || e.attributes["type"]
       if rend == 'hr'
         e.name='hr'
       else
@@ -212,6 +249,44 @@ module AbstractXmlHelper
       e.children.each { |c| unclear.add(c) }
       unclear.add_text("]")
       e.replace_with(unclear)
+    end
+
+    doc.elements.each("//cb") do |e|
+      number = e.attributes["n"]
+      if number.blank?
+        text="{column}"
+      else
+        text="{column #{number}}"
+      end
+
+      cb = REXML::Element.new('span')
+      rend = e.attributes["rend"]
+      cb.add(REXML::Element.new('br'))      
+      cb.add_text(text)
+      e.children.each { |c| unclear.add(c) }
+      cb.add(REXML::Element.new('br'))
+
+      cb.add_attribute('class', 'cb')
+      e.replace_with(cb)
+    end
+
+    doc.elements.each("//pb") do |e|
+      number = e.attributes["n"]
+      if number.blank?
+        text="{page break}"
+      else
+        text="{page break #{number}}"
+      end
+
+      pb = REXML::Element.new('span')
+      rend = e.attributes["rend"]
+      pb.add(REXML::Element.new('br'))      
+      pb.add_text(text)
+      e.children.each { |c| unclear.add(c) }
+      pb.add(REXML::Element.new('br'))
+
+      pb.add_attribute('class', 'pb')
+      e.replace_with(pb)
     end
 
     doc.elements.each("//marginalia") do |e|
@@ -268,13 +343,22 @@ module AbstractXmlHelper
     if @page
       doc.elements.each("//texFigure") do |e|
         position = e.attributes["position"]
-        
+
         span = REXML::Element.new('img')
         span.add_attribute('src', (file_to_url(TexFigure.artifact_file_path(@page.id, position)) + "?timestamp=" + Time.now.to_i.to_s))
-        
+
         e.replace_with(span)
       end
-      
+
+    end
+
+    # \textquotesingle fix
+    SANITIZE_SINGLE_QUOTE_TAGS.each do |tag|
+      doc.elements.each("//#{tag}") do |e|
+        if e.text
+          e.text = e.text.gsub("'", "`")
+        end
+      end
     end
 
     # now our doc is correct - what do we do with it?
@@ -286,7 +370,11 @@ module AbstractXmlHelper
     my_display_html.gsub!('<p/>','')
     my_display_html.gsub!(/<\/?page>/,'')
 
-    return ActionController::Base.helpers.sanitize(my_display_html.strip, :tags => SANITIZE_ALLOWED_TAGS).gsub('<br>','<br/>').gsub('<hr>','<hr/>')
+    ActionController::Base.helpers.sanitize(
+      my_display_html.strip,
+      tags: SANITIZE_ALLOWED_TAGS,
+      attributes: SANITIZE_ALLOWED_ATTRIBUTES
+    ).gsub('<br>','<br/>').gsub('<hr>','<hr/>')
   end
 
 end

@@ -1,13 +1,39 @@
-#    create_table :articles do |t|
-#      # t.column :name, :string
-#      t.column :title, :string
-#      t.column :source_text, :text
-#      # automated stuff
-#      t.column :created_on, :datetime
-#      t.column :lock_version, :integer, :default => 0
-#    end
+# == Schema Information
+#
+# Table name: articles
+#
+#  id               :integer          not null, primary key
+#  begun            :string(255)
+#  bibliography     :text(65535)
+#  birth_date       :string(255)
+#  created_on       :datetime
+#  death_date       :string(255)
+#  ended            :string(255)
+#  graph_image      :string(255)
+#  latitude         :decimal(7, 5)
+#  lock_version     :integer          default(0)
+#  longitude        :decimal(8, 5)
+#  pages_count      :integer          default(0)
+#  provenance       :string(255)
+#  race_description :string(255)
+#  sex              :string(255)
+#  short_summary    :string(255)
+#  source_text      :text(16777215)
+#  title            :string(255)
+#  uri              :string(255)
+#  xml_text         :text(16777215)
+#  collection_id    :integer
+#  created_by_id    :integer
+#
+# Indexes
+#
+#  fk_rails_35e2f292e3              (created_by_id)
+#  index_articles_on_collection_id  (collection_id)
+#
 class Article < ApplicationRecord
   include XmlSourceProcessor
+  include EdtfDate
+
   #include ActiveModel::Dirty
 
   before_save :process_source
@@ -17,31 +43,36 @@ class Article < ApplicationRecord
   validates :latitude, allow_blank: true, numericality: { less_than_or_equal_to: 90, greater_than_or_equal_to: -90}
   validates :longitude, allow_blank: true, numericality: { less_than_or_equal_to: 180, greater_than_or_equal_to: -180}
 
-
   has_and_belongs_to_many :categories, -> { distinct }
   belongs_to :collection, optional: true
-  has_many(:target_article_links, :foreign_key => "target_article_id", :class_name => 'ArticleArticleLink')
+  has_many :target_article_links, foreign_key: 'target_article_id', class_name: 'ArticleArticleLink'
   scope :target_article_links, -> { include 'source_article' }
   scope :target_article_links, -> { order "articles.title ASC" }
 
-  has_many(:source_article_links, :foreign_key => "source_article_id", :class_name => 'ArticleArticleLink')
-  has_many(:page_article_links)
+  has_many :source_article_links, foreign_key: 'source_article_id', class_name: 'ArticleArticleLink'
+  has_many :page_article_links
   scope :page_article_links, -> { includes(:page) }
   scope :page_article_links, -> { order("pages.work_id, pages.position ASC") }
 
-  scope :pages_for_this_article, -> { order("pages.work_id, pages.position ASC").includes(:pages)}
+  scope :pages_for_this_article, -> { order("pages.work_id, pages.position ASC").includes(:pages) }
 
-  has_many :pages, through: :page_article_links, counter_cache: true
+  has_many :pages, through: :page_article_links
+  has_many :works, through: :page_article_links
 
   has_many :article_versions, -> { order 'version DESC' }, dependent: :destroy
 
   after_save :create_version
 
+  edtf_date_attribute :birth_date
+  edtf_date_attribute :death_date
+  edtf_date_attribute :begun
+  edtf_date_attribute :ended
+
   def link_list
     self.page_article_links.includes(:page).order("pages.work_id, pages.title")
   end
 
-  #needed for document sets to correctly display articles
+  # Needed for document sets to correctly display articles
   def show_links(collection)
     self.page_article_links.includes(:page).where(pages: {work_id: collection.works.ids})
   end
@@ -54,10 +85,10 @@ class Article < ApplicationRecord
     self[:source_text] || ''
   end
 
-
   def self.delete_orphan_articles
     # don't delete orphan articles with contents
-    Article.delete_all("source_text IS NULL AND id NOT IN (select article_id from page_article_links)")
+    Article.where(provenance: nil).
+      where('source_text IS NULL AND id NOT IN (SELECT article_id FROM page_article_links)').destroy_all
   end
 
   #######################
@@ -70,6 +101,23 @@ class Article < ApplicationRecord
   def gis_enabled?
     self.categories.where(:gis_enabled => true).present?
   end
+
+  def bio_fields_enabled?
+    self.categories.where(:bio_fields_enabled => true).present?
+  end
+
+  def org_fields_enabled?
+    self.categories.where(:org_fields_enabled => true).present?
+  end
+
+  def clear_relationship_graph
+    File.unlink(d3js_file) if File.exists?(d3js_file)
+  end
+
+  def d3js_file
+    "#{Rails.root}/public/images/working/dot/#{self.id}.d3.js"
+  end
+
 
   #######################
   # De-Dup Support
@@ -122,7 +170,7 @@ class Article < ApplicationRecord
   def clear_links(type='does_not_apply')
     # clear out the existing links to this page
     if self.id
-      ArticleArticleLink.where("source_article_id = #{self.id}").delete_all
+      ArticleArticleLink.where("source_article_id = #{self.id}").destroy_all
     end
   end
 

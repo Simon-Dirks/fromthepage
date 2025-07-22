@@ -20,6 +20,7 @@ describe "disable subject linking", :order => :defined do
     page.find('.side-tabs').click_link('Task Configuration')
     expect(page).to have_content("Enable subject indexing")
     uncheck('collection_subjects_enabled')
+    sleep(3)
     #have to find the collection again to make sure it's been updated
     collection = Collection.where(owner_user_id: @owner.id).first
     expect(collection.subjects_disabled).to be true
@@ -98,7 +99,7 @@ describe "disable subject linking", :order => :defined do
     expect(collection.subjects_disabled).to be false
   end
 
- it "checks links work when enabled" do
+ it "checks links work when enabled", js: true do
     visit collection_read_work_path(@work.collection.owner, @work.collection, @work)
     expect(page).to have_content(@collection.title)
     expect(page).to have_content(@work.title)

@@ -1,6 +1,38 @@
 # A Deed is a scholarly contribution made by a user to a page. It's kind
 # of like "doing a good deed." There are several types of deeds (which live in
 # the DeedType model). Ex: "transcribed", "marked as blank"
+# == Schema Information
+#
+# Table name: deeds
+#
+#  id               :integer          not null, primary key
+#  deed_type        :string(10)
+#  is_public        :boolean          default(TRUE)
+#  prerender        :string(8191)
+#  prerender_mailer :string(8191)
+#  created_at       :datetime
+#  updated_at       :datetime
+#  article_id       :integer
+#  collection_id    :integer
+#  note_id          :integer
+#  page_id          :integer
+#  user_id          :integer
+#  visit_id         :integer
+#  work_id          :integer
+#
+# Indexes
+#
+#  index_deeds_on_article_id                                        (article_id)
+#  index_deeds_on_collection_id_and_created_at                      (collection_id,created_at)
+#  index_deeds_on_collection_id_and_deed_type_and_created_at        (collection_id,deed_type,created_at)
+#  index_deeds_on_created_at_and_collection_id                      (created_at,collection_id)
+#  index_deeds_on_note_id                                           (note_id)
+#  index_deeds_on_page_id                                           (page_id)
+#  index_deeds_on_user_id_and_created_at                            (user_id,created_at)
+#  index_deeds_on_visit_id                                          (visit_id)
+#  index_deeds_on_work_id_and_created_at                            (work_id,created_at)
+#  index_deeds_on_work_id_and_deed_type_and_user_id_and_created_at  (work_id,deed_type,user_id,created_at)
+#
 class Deed < ApplicationRecord
   belongs_to :article, optional: true
   belongs_to :collection, optional: true
@@ -57,13 +89,13 @@ class Deed < ApplicationRecord
 
   def update_collections_most_recent_deed
     if self.collection
-      self.collection.update(most_recent_deed_created_at: self.created_at)
+      self.collection.update_columns(most_recent_deed_created_at: self.created_at)
     end
   end
 
   def update_works_most_recent_deed
     if self.work
-      self.work.update(most_recent_deed_created_at: self.created_at)
+      self.work.update_columns(most_recent_deed_created_at: self.created_at)
     end
   end
 

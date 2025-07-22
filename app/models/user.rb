@@ -1,3 +1,57 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                        :integer          not null, primary key
+#  about                     :text(65535)
+#  account_type              :string(255)
+#  activity_email            :boolean
+#  admin                     :boolean          default(FALSE)
+#  api_key                   :string(255)
+#  current_sign_in_at        :datetime
+#  current_sign_in_ip        :string(255)
+#  deleted                   :boolean          default(FALSE)
+#  dictation_language        :string(255)      default("en-US")
+#  display_name              :string(255)
+#  email                     :string(255)
+#  encrypted_password        :string(255)      default(""), not null
+#  footer_block              :text(16777215)
+#  guest                     :boolean
+#  help                      :text(65535)
+#  last_sign_in_at           :datetime
+#  last_sign_in_ip           :string(255)
+#  location                  :string(255)
+#  login                     :string(255)
+#  orcid                     :string(255)
+#  owner                     :boolean          default(FALSE)
+#  paid_date                 :datetime
+#  password_salt             :string(255)      default(""), not null
+#  picture                   :string(255)
+#  preferred_locale          :string(255)
+#  provider                  :string(255)
+#  real_name                 :string(255)
+#  remember_created_at       :datetime
+#  remember_token            :string(255)
+#  remember_token_expires_at :datetime
+#  reset_password_sent_at    :datetime
+#  reset_password_token      :string(255)
+#  sign_in_count             :integer          default(0), not null
+#  slug                      :string(255)
+#  sso_issuer                :string(255)
+#  start_date                :datetime
+#  uid                       :string(255)
+#  website                   :string(255)
+#  created_at                :datetime
+#  updated_at                :datetime
+#  external_id               :string(255)
+#
+# Indexes
+#
+#  index_users_on_deleted               (deleted)
+#  index_users_on_login                 (login)
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_slug                  (slug) UNIQUE
+#
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -7,6 +61,7 @@ class User < ApplicationRecord
          :omniauth_providers => [:google_oauth2,:saml]
 
   include OwnerStatistic
+  include ElasticDelta
   extend FriendlyId
   friendly_id :slug_candidates, :use => [:slugged, :history]
 
@@ -17,14 +72,14 @@ class User < ApplicationRecord
 
   mount_uploader :picture, PictureUploader
 
-  has_many(:owner_works,
-           :foreign_key => "owner_user_id",
-           :class_name => 'Work')
-  has_many :collections, :foreign_key => "owner_user_id"
-  has_many :document_sets, :foreign_key => "owner_user_id"
+  has_many :uploaded_works, foreign_key: 'owner_user_id', class_name: 'Work'
+  has_many :collections, foreign_key: 'owner_user_id'
+  has_many :document_sets, foreign_key: 'owner_user_id'
   has_many :ia_works
   has_many :visits
   has_many :bulk_exports
+  has_many :document_uploads
+  has_many :external_api_requests
   has_many :flags, :foreign_key => "author_user_id"
   has_one :notification, :dependent => :destroy
 
@@ -48,37 +103,77 @@ class User < ApplicationRecord
                           :join_table => 'collection_reviewers',
                           :class_name => 'Collection')
 
-
-  has_many :page_versions, -> { order 'created_on DESC' }
-  has_many :article_versions, -> { order 'created_on DESC' }
-  has_many :notes, -> { order 'created_at DESC' }
+  has_many :page_versions, -> { order(created_on: :desc) }
+  has_many :article_versions, -> { order(created_on: :desc) }
+  has_many :notes, -> { order(created_at: :desc) }
   has_many :deeds
 
-  has_many :random_collections,   -> { unrestricted.has_intro_block.not_near_complete.not_empty.random_sample },
+  has_many :random_collections,   -> { unrestricted.has_intro_block.not_near_complete.not_empty },
     class_name: "Collection",  :foreign_key => "owner_user_id"
-  has_many :random_document_sets, -> { unrestricted.has_intro_block.not_near_complete.not_empty.random_sample },
+  has_many :random_document_sets, -> { unrestricted.has_intro_block.not_near_complete.not_empty },
     class_name: "DocumentSet", :foreign_key => "owner_user_id"
 
   has_many :metadata_description_versions, :dependent => :destroy
 
-
   scope :owners,           -> { where(owner: true) }
   scope :trial_owners,     -> { owners.where(account_type: 'Trial') }
-  scope :findaproject_owners, -> { owners.where.not(account_type: [nil, 'Trial', 'Staff']) }
+
+  scope :with_owner_works, -> { joins(:uploaded_works).distinct }
+  scope :findaproject_orgs, -> { owners.where(account_type: ['Large Institution', 'Small Organization']) }
+  scope :findaproject_individuals, -> { owners.where(account_type: ['Legacy', 'Individual Researcher']) }
   scope :paid_owners,      -> { non_trial_owners.where('paid_date > ?', Time.now) }
   scope :expired_owners,   -> { non_trial_owners.where('paid_date <= ?', Time.now) }
   scope :active_mailers,   -> { where(activity_email: true)}
 
-  validates :login, presence: true, uniqueness: { case_sensitive: false }, format: { with: /\A[^<>]*\z/, message: "Invalid characters in username"}, exclusion: { in: %w(transcribe translate work collection deed), message: "Username is invalid"}
+  validates :login, presence: true,
+                    uniqueness: { case_sensitive: false },
+                    format: { with: /\A[^<>]*\z/,
+                              message: ->(_, _) { I18n.t('devise.errors.messages.login.format') } },
+                    exclusion: { in: %w[transcribe translate work collection deed],
+                                 message: ->(_, _) { I18n.t('devise.errors.messages.login.exclusion') } }
+
   validates :website, allow_blank: true, format: { with: URI.regexp }
   validate :email_does_not_match_denylist
-
+  validate :display_name_presence
+  validate :email_domain_blacklist, if: -> { validation_context == :registration }
 
   before_validation :update_display_name
 
   after_save :create_notifications
   after_create :set_default_footer_block
-  #before_destroy :clean_up_orphans
+  # before_destroy :clean_up_orphans
+
+  def as_indexed_json
+    return {
+      _id: self.id,
+      about: self.about,
+      display_name: self.display_name,
+      login: self.login,
+      real_name: self.real_name,
+      website: self.website
+    }
+  end
+
+  def self.es_match_query(query)
+    return {
+      bool: {
+        must: {
+          simple_query_string: {
+            query: query,
+            fields: [
+              "about",
+              "real_name",
+              "website"
+            ]
+          }
+        },
+        filter: [
+          # Need index filter for cross collection search
+          {prefix: {_index: "ftp_user"}}
+        ]
+      }
+    }
+  end
 
   def email_does_not_match_denylist
     raw = PageBlock.where(view: "email_denylist").first
@@ -90,12 +185,21 @@ class User < ApplicationRecord
     end
   end
 
+  def display_name_presence
+    return unless validation_context == :registration
+    return unless new_record?
+    return unless owner
+
+    errors.add(:display_name, :blank) if self[:display_name].blank?
+  end
 
   def update_display_name
+    self.real_name = nil if self.real_name.blank?
+
     if self.owner
-      self.display_name = self.real_name
+      self[:display_name] = self.real_name
     else
-      self.display_name = login
+      self[:display_name] = self.login
     end
   end
 
@@ -162,7 +266,7 @@ class User < ApplicationRecord
   end
 
   def all_owner_collections
-    Collection.where(owner_user_id: self.id).or(Collection.where(id: self.owned_collections.ids)).distinct.order(:title)
+    Collection.where(owner_user_id: id).or(Collection.where(id: owned_collections.select(:id))).distinct.order(:title)
   end
 
   def most_recently_managed_collection_id
@@ -175,12 +279,20 @@ class User < ApplicationRecord
   end
 
   def owner_works
-    works = Work.where(collection_id: self.all_owner_collections.ids)
-    return works
+    Work.where(collection_id: all_owner_collections.select(:id))
   end
 
-  def can_transcribe?(work)
-    !work.restrict_scribes || self.like_owner?(work) || work.scribes.include?(self)
+  def can_transcribe?(work, collection=nil)
+    return true if like_owner?(collection)
+    collection ||= work.access_object(self) || work.collection
+
+    if collection.is_a? DocumentSet
+      return true if collection.visibility_public? || like_owner?(work)
+
+      collection.collaborators.find_by(id: id).present? || collection.collection.collaborators.find_by(id: id).present? || work&.scribes&.include?(self)
+    else
+      !work&.restrict_scribes || like_owner?(work) || work&.scribes&.include?(self)
+    end
   end
 
   def can_review?(obj)
@@ -227,9 +339,9 @@ class User < ApplicationRecord
 
   def display_name
     if self.guest
-      "Guest"
+      'Guest'
     else
-      self[:display_name] || self[:login]
+      self[:display_name].presence || self[:login]
     end
   end
 
@@ -255,7 +367,7 @@ class User < ApplicationRecord
   end
 
   def unrestricted_document_sets
-    DocumentSet.where(owner_user_id: self.id).where(is_public: true)
+    document_sets.where(visibility: [:public, :read_only])
   end
 
 
@@ -275,13 +387,12 @@ class User < ApplicationRecord
 
     if user
       collaborator_collections = self.all_owner_collections.where(:restricted => true).joins(:collaborators).where("collection_collaborators.user_id = ?", user.id)
-      owned_collections = self.owned_collections
 
-      collaborator_sets = self.document_sets.where(:is_public => false).joins(:collaborators).where("document_set_collaborators.user_id = ?", user.id)
+      collaborator_sets = self.document_sets.restricted.joins(:collaborators).where("document_set_collaborators.user_id = ?", user.id)
       parent_collaborator_sets = []
       collaborator_collections.each{|c| parent_collaborator_sets += c.document_sets}
 
-      (filtered_public_collections+collaborator_collections+owned_collections+public_sets+collaborator_sets+parent_collaborator_sets).uniq
+      (filtered_public_collections+collaborator_collections+public_sets+collaborator_sets+parent_collaborator_sets).uniq
     else
       (filtered_public_collections+public_sets)
     end
@@ -330,6 +441,10 @@ class User < ApplicationRecord
     end
   end
 
+  def last_deed_at
+    deeds.maximum(:created_at)
+  end
+
   def self.search(search)
     wildcard = "%#{search}%"
     where("display_name LIKE ? OR login LIKE ? OR real_name LIKE ? OR email LIKE ?", wildcard, wildcard, wildcard, wildcard)
@@ -369,7 +484,6 @@ class User < ApplicationRecord
     self.save
   end
 
-
   # Generate a unique API key
   def self.generate_api_key
     loop do
@@ -383,4 +497,24 @@ class User < ApplicationRecord
     save
   end
 
+  def organization?
+    self.owner? && self.account_type != 'Staff'
+  end
+
+  def staff?
+    self.account_type == 'Staff'
+  end
+
+  private
+
+  def email_domain_blacklist
+    return if email.blank?
+
+    domain = email.split('@').last&.downcase
+    tld = domain.split('.').last
+
+    return unless Settings.spammy_emails.tlds.include?(tld)
+
+    errors.add(:email, :spammy)
+  end
 end

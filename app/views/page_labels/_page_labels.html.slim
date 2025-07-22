@@ -6,7 +6,7 @@ p = t('transcribe.page_labels.page_labels_introduction')
   .form lang="#{@collection.text_language}" dir=direction class=direction
     .big
       - label_options = Label.all.map { |label| [label.title, label.id] }
-      = f.select :label_ids, options_for_select(label_options, @page.label_ids), {}, 'data-multi-select': true, size: 1, multiple: true
+      = f.select :label_ids, options_for_select(label_options, @page.label_ids), {}, data: { controller: 'select2', select2_placeholder_value: t('transcribe.page_labels.select_labels') }, size: 1, multiple: true
 
   .toolbar
     .toolbar_group = f.submit t('transcribe.page_labels.page_save_labels')

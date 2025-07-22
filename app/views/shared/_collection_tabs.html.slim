@@ -15,6 +15,12 @@
   :path => "#{main_app.collection_subjects_path(@collection.owner, @collection)}",
 }]
 
+-tabs +=[{\
+  :name => t('.page_labels'),
+  :selected => 15,
+  :path => "#{main_app.collection_page_labels_path(@collection.owner, @collection)}",
+}]
+
 -if @collection.messageboards_enabled? && signed_in?
   -tabs +=[{\
   :name => t('.forum'),

@@ -1,0 +1,14 @@
+=render partial: 'shared/breadcrumbs', locals: { :trail => [{ :title => @collection.title, :path => collection_path(@collection.owner, @collection) }, { :title => t('.page_labels'), :path => collection_page_labels_path(@collection.owner, @collection) }, { :title => t('.new_label') }] }
+
+.columns
+  article.maincol.new-page-label
+    h3 = t('.new_label')
+    
+    = form_with(model: @label, url: collection_create_page_label_path(@collection.owner, @collection), method: :post, local: true) do |f|
+      .field
+        / = f.label :title, t('.label_title')
+        = f.text_field :title, required: true
+      
+      .field.buttons
+        button.button type="submit" = t('.create_label')
+        = link_to t('.cancel'), collection_page_labels_path(@collection.owner, @collection), class: 'button'

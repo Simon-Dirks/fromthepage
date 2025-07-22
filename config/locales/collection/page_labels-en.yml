@@ -1,0 +1,37 @@
+---
+en:
+  collection:
+    page_labels:
+    new_page_label:
+      new_label: "Create New Card Category"
+      label_title: "Category Title"
+      create_label: "Create Category"
+      cancel: "Cancel"
+      page_labels: "Card Categories"
+    create_page_label:
+      label_created: "Category created successfully"
+      label_create_error: "Error creating category"
+    edit_page_label:
+      edit_label: "Edit Category"
+      label_title: "Category Title"
+      update_label: "Update Category"
+      cancel: "Cancel"
+      page_labels: "Card Categories"
+    update_page_label:
+      label_updated: "Category updated successfully"
+      label_update_error: "Error updating category"
+    delete_page_label:
+      label_deleted: "Category deleted successfully"
+      error_deleting_label: "Error deleting category"
+    page_labels:
+      page_labels_overview: "Card Categories Overview"
+      page_labels_description: "This page shows all the card categories and the pages they are assigned to."
+      no_page_labels: "No Card Categories Found"
+      no_page_labels_description: "There are no card categories in this collection. Card categories can be added to pages during transcription."
+      no_pages_with_this_label: "No pages are currently assigned this category."
+      page: "Page"
+      work: "Work"
+      edit: "Edit"
+      delete: "Delete"
+      create_new_label: "Create new card category"
+      confirm_delete: "Are you sure you want to delete this category? This will remove the category from all pages."

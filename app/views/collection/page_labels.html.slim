@@ -1,0 +1,41 @@
+=render({ :partial => '/shared/collection_tabs', :locals => { :selected => 15, :collection_id => @collection.id }})
+
+/ h2 = t('.page_labels_overview')
+
+p = t('.page_labels_description')
+
+.header-actions
+  = link_to t('.create_new_label'), collection_new_page_label_path(@collection.owner, @collection), class: 'button'
+
+- if @labels.empty?
+  .nodata
+    h4 = t('.no_page_labels')
+    p = t('.no_page_labels_description')
+- else
+  - @labels.each do |label|
+    .collection-work
+      .label-header
+        h4 = label.title
+        .label-actions
+          = link_to collection_edit_page_label_path(@collection.owner, @collection, label), class: 'button' do
+            = svg_symbol '#icon-edit', class: 'icon'
+            span = t('.edit')
+          = link_to collection_delete_page_label_path(@collection.owner, @collection, label), 
+            method: :delete, 
+            data: { confirm: t('.confirm_delete') }, 
+            class: 'button' do
+            = svg_symbol '#icon-remove-sign', class: 'icon'
+            span = t('.delete')
+      - if @pages_by_label[label.id].empty?
+        p = t('.no_pages_with_this_label')
+      - else
+        table.datagrid
+          thead
+            tr
+              th = t('.page')
+              th = t('.work')
+          tbody
+            - @pages_by_label[label.id].each do |page|
+              tr
+                td = link_to page.title, { controller: 'display', action: 'display_page', page_id: page.id, work_id: page.work.id }
+                td = link_to page.work.title, { controller: 'display', action: 'read_work', work_id: page.work.id }

@@ -1,0 +1,14 @@
+=render partial: 'shared/breadcrumbs', locals: { :trail => [{ :title => @collection.title, :path => collection_path(@collection.owner, @collection) }, { :title => t('.page_labels'), :path => collection_page_labels_path(@collection.owner, @collection) }, { :title => t('.edit_label') }] }
+
+.columns
+  article.maincol.edit-page-label
+    h3 = t('.edit_label')
+    
+    = form_with(model: @label, url: collection_update_page_label_path(@collection.owner, @collection, @label), method: :patch, local: true) do |f|
+      .field
+        / = f.label :title, t('.label_title')
+        = f.text_field :title, required: true
+      
+      .field.buttons
+        button.button type="submit" = t('.update_label')
+        = link_to t('.cancel'), collection_page_labels_path(@collection.owner, @collection), class: 'button'

@@ -1,0 +1,27 @@
+.header-actions,
+.label-actions {
+  margin-bottom: 2rem;
+}
+
+.label-actions .button {
+  margin-right: 0.5rem;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.new-page-label,
+.edit-page-label {
+  .field.buttons {
+    margin-top: 1rem;
+
+    .button {
+      margin-right: 0.5rem;
+    }
+
+    .button:last-child {
+      margin-right: 0;
+    }
+  }
+}

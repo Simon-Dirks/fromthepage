@@ -41,7 +41,7 @@ class CollectionController < ApplicationController
     :search_users
   ]
   before_action :review_authorized?, only: [:reviewer_dashboard, :works_to_review, :one_off_list, :recent_contributor_list, :user_contribution_list]
-  before_action :set_collection, only: edit_actions + [:show, :update, :contributors, :new_work, :works_list, :needs_transcription_pages, :needs_review_pages, :start_transcribing]
+  before_action :set_collection, only: edit_actions + [:show, :update, :contributors, :new_work, :works_list, :needs_transcription_pages, :needs_review_pages, :start_transcribing, :page_labels]
   before_action :load_settings, only: [:upload, :edit_collaborators, :edit_owners, :block_users, :remove_owner, :remove_collaborator, :edit_reviewers, :remove_reviewer]
   before_action :permit_only_transcribed_works_flag, only: [:works_list]
 
@@ -689,6 +689,78 @@ class CollectionController < ApplicationController
     @review='review'
     @pages = Page.where(work_id: work_ids).joins(:work).merge(Work.unrestricted).review.paginate(page: params[:page], per_page: 10)
     @heading = t('.pages_need_review')
+  end
+
+  def page_labels
+    # Get all labels that have pages in this collection
+    collection_labels = Label.includes(:pages)
+                            .where(pages: { work_id: @collection.works.pluck(:id) })
+                            .distinct
+    
+    # Get all labels in the system (so we can display labels without pages as well)
+    all_labels = Label.all
+    
+    # Combine the two sets to ensure we show all labels
+    # NOTE: Currently assuming we are only working with a single collection
+    # Labels are not necessarily connected to a collection at this point, only to pages
+    @labels = (collection_labels + all_labels).uniq
+    @pages_by_label = {}
+    
+    @labels.each do |label|
+      @pages_by_label[label.id] = label.pages
+                                       .joins(:work)
+                                       .where(works: { collection_id: @collection.id })
+                                       .includes(:work)
+                                       .order('works.title, pages.position')
+                                       .paginate(page: params[:page], per_page: 50)
+    end
+  end
+  
+  def new_page_label
+    @label = Label.new
+  end
+  
+  def create_page_label
+    @label = Label.new(label_params)
+    
+    if @label.save
+      flash[:notice] = t('.label_created')
+      redirect_to collection_page_labels_path(@collection.owner, @collection)
+    else
+      flash[:error] = t('.label_create_error')
+      render :new_page_label
+    end
+  end
+  
+  def edit_page_label
+    @label = Label.find(params[:label_id])
+  end
+  
+  def update_page_label
+    @label = Label.find(params[:label_id])
+    if @label.update(label_params)
+      flash[:notice] = t('.label_updated')
+      redirect_to collection_page_labels_path(@collection.owner, @collection)
+    else
+      flash[:error] = t('.label_update_error')
+      render :edit_page_label
+    end
+  end
+  
+  def delete_page_label
+    @label = Label.find(params[:label_id])
+    if @label.destroy
+      flash[:notice] = t('.label_deleted')
+    else
+      flash[:error] = t('.error_deleting_label')
+    end
+    redirect_to collection_page_labels_path(@collection.owner, @collection)
+  end
+  
+  private
+  
+  def label_params
+    params.require(:label).permit(:title)
   end
 
   def needs_metadata_works

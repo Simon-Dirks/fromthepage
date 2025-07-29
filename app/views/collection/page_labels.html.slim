@@ -5,27 +5,29 @@
 p = t('.page_labels_description')
 
 .header-actions
-  = link_to t('.create_new_label'), collection_new_page_label_path(@collection.owner, @collection), class: 'button'
+  - if user_signed_in? && current_user.like_owner?(@collection)
+    = link_to t('.create_new_label'), collection_new_page_label_path(@collection.owner, @collection), class: 'button'
 
 - if @labels.empty?
   .nodata
     h4 = t('.no_page_labels')
     p = t('.no_page_labels_description')
-- else
+- else 
   - @labels.each do |label|
     .collection-work
       .label-header
         h4 = label.title
         .label-actions
-          = link_to collection_edit_page_label_path(@collection.owner, @collection, label), class: 'button' do
-            = svg_symbol '#icon-edit', class: 'icon'
-            span = t('.edit')
-          = link_to collection_delete_page_label_path(@collection.owner, @collection, label), 
-            method: :delete, 
-            data: { confirm: t('.confirm_delete') }, 
-            class: 'button' do
-            = svg_symbol '#icon-remove-sign', class: 'icon'
-            span = t('.delete')
+          - if user_signed_in? && current_user.like_owner?(@collection)
+            = link_to collection_edit_page_label_path(@collection.owner, @collection, label), class: 'button' do
+              = svg_symbol '#icon-edit', class: 'icon'
+              span = t('.edit')
+            = link_to collection_delete_page_label_path(@collection.owner, @collection, label), 
+              method: :delete, 
+              data: { confirm: t('.confirm_delete') }, 
+              class: 'button' do
+              = svg_symbol '#icon-remove-sign', class: 'icon'
+              span = t('.delete')
       - if @pages_by_label[label.id].empty?
         p = t('.no_pages_with_this_label')
       - else

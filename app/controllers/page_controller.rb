@@ -4,7 +4,7 @@ class PageController < ApplicationController
   include ImageHelper
 
   protect_from_forgery except: [:set_page_title]
-  before_action :authorized?, except: [:alto_xml]
+  before_action :authorized?, except: [:alto_xml, :update_labels]
 
   def authorized?
     if user_signed_in?

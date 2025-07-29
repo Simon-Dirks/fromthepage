@@ -15,7 +15,9 @@
     display: inline-block;
     box-sizing: border-box;
   }
-  &.vmiddle > &_box { vertical-align: middle; }
+  &.vmiddle > &_box {
+    vertical-align: middle;
+  }
   &.nowrap {
     overflow: hidden;
     white-space: nowrap;
@@ -32,7 +34,7 @@
   &:after {
     height: 0;
     width: 100%;
-    content: '';
+    content: "";
     overflow: hidden;
     visibility: hidden;
     display: inline-block;
@@ -46,7 +48,9 @@
     vertical-align: middle;
     box-sizing: border-box;
   }
-  &.vtop > &_box { vertical-align: top; }
+  &.vtop > &_box {
+    vertical-align: top;
+  }
 }
 
 .centered {
@@ -58,9 +62,10 @@
   word-spacing: -1px;
   text-align: center;
   white-space: nowrap;
-  &:before, &:after {
+  &:before,
+  &:after {
     width: 0;
-    content: '';
+    content: "";
     height: 100%;
     display: inline-block;
     vertical-align: middle;
@@ -75,12 +80,11 @@
   }
 }
 
-
 // ---------------------------
 // GLOBAL BUSY INDICATOR
 // ---------------------------
 
-@function svg-spinner($color: #FFF) {
+@function svg-spinner($color: #fff) {
   @return '
   <g fill="none" stroke="#{$color}" stroke-width="4" stroke-linecap="round">
     <line opacity="1.00" x1="24"   y1="4"    x2="24"   y2="12"/>
@@ -99,8 +103,12 @@
 }
 
 @keyframes spinner {
-  0%    { transform: rotate(0deg); }
-  100%  { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .page-busy-overlay {
@@ -113,18 +121,20 @@
   position: fixed;
   visibility: hidden;
   background: rgba(#111, 0.8);
-  transform: translate3d(0,0,0);
+  transform: translate3d(0, 0, 0);
   transition: opacity 0.3s, visibility 0.3s;
   .page-busy & {
     opacity: 1;
     visibility: visible;
     transition-delay: 2s;
-    &:before { display: block; }
+    &:before {
+      display: block;
+    }
   }
   &:before {
     top: 50%;
     left: 50%;
-    content: '';
+    content: "";
     width: 48px;
     height: 48px;
     display: none;
@@ -135,7 +145,6 @@
     @include background-svg(48, 48, svg-spinner());
   }
 }
-
 
 // ---------------------------
 // IMAGE UPLOAD FORM
@@ -148,7 +157,7 @@
     width: 150px;
     height: 150px;
     cursor: pointer;
-    background: #FFF;
+    background: #fff;
     position: relative;
     vertical-align: top;
     display: inline-block;
@@ -158,7 +167,7 @@
       top: 50%;
       left: 50%;
       z-index: 1;
-      color: #BBB;
+      color: #bbb;
       display: block;
       line-height: 2;
       padding: 0 0.8em;
@@ -167,7 +176,7 @@
       white-space: nowrap;
       transition: color 0.2s;
       content: attr(data-empty);
-      background: rgba(#FFF, 0);
+      background: rgba(#fff, 0);
       font-family: $fontFamilyHead;
       transform: translate(-50%, -50%);
     }
@@ -176,9 +185,11 @@
         z-index: 3;
         color: #533;
         content: attr(data-hover);
-        background: rgba(#FFF, 0.8);
+        background: rgba(#fff, 0.8);
       }
-      img { opacity: 0.5; }
+      img {
+        opacity: 0.5;
+      }
     }
   }
   img {
@@ -186,7 +197,7 @@
     position: relative;
     transition: opacity 0.2s;
   }
-  input[type=file] {
+  input[type="file"] {
     top: 0;
     left: 0;
     right: 0;
@@ -195,14 +206,17 @@
     opacity: 0;
     outline: none;
     position: absolute;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
   }
   &.busy {
-    label { cursor: default; }
-    label:before, label:hover:before {
+    label {
+      cursor: default;
+    }
+    label:before,
+    label:hover:before {
       padding: 0;
       z-index: 3;
-      content: '';
+      content: "";
       width: 48px;
       height: 48px;
       transform: none;
@@ -212,17 +226,19 @@
       animation: spinner 1s infinite steps(12);
       @include background-svg(48, 48, svg-spinner(#000));
     }
-    img, label:hover img { opacity: 0.3; }
+    img,
+    label:hover img {
+      opacity: 0.3;
+    }
   }
 }
-
 
 // ---------------------------
 // TOOLTIP
 // ---------------------------
 
 .tooltip {
-  color: #FFF;
+  color: #fff;
   padding: 15px;
   text-align: left;
   max-width: 400px;
@@ -236,7 +252,7 @@
   -moz-osx-font-smoothing: grayscale;
   &:before {
     left: 10px;
-    content: '';
+    content: "";
     bottom: 100%;
     position: absolute;
     border: 6px solid transparent;
@@ -244,8 +260,10 @@
     border-bottom-color: rgba(#000, 0.8);
   }
   a {
-    color: #AAA;
-    &:hover { color: #FFF; }
+    color: #aaa;
+    &:hover {
+      color: #fff;
+    }
   }
   &_header {
     color: inherit;
@@ -254,10 +272,16 @@
   &_content {
     margin: 0.5em 0;
     line-height: 1.2;
-    p { margin: 0.5em 0; }
-    a { color: #FE8; }
+    p {
+      margin: 0.5em 0;
+    }
+    a {
+      color: #fe8;
+    }
   }
-  &_footer { margin: 0.8em 0 0 0; }
+  &_footer {
+    margin: 0.8em 0 0 0;
+  }
 }
 
 .tippy-box {
@@ -271,24 +295,25 @@
   color: rgba(#000, 0.85);
 }
 
-
 .expanded-abbreviation {
   cursor: help;
   text-decoration: italic;
   background-size: 2px 1px;
   background-repeat: repeat-x;
   background-position: 0 1.1em;
-  background-image: linear-gradient(to right, transparent 50%, currentColor 50%);
+  background-image: linear-gradient(
+    to right,
+    transparent 50%,
+    currentColor 50%
+  );
 }
-
-
 
 .original-abbreviation {
   /* hide and position tooltip */
-/*  top: -0.5em; */
+  /*  top: -0.5em; */
   color: white;
   font-size: 150%;
-  color: #FFF;
+  color: #fff;
   padding: 10px;
   text-align: left;
   max-width: 400px;
@@ -316,24 +341,25 @@
   opacity: 1;
 }
 
-
 .footnote-marker {
   cursor: help;
   text-decoration: italic;
   background-size: 2px 1px;
   background-repeat: repeat-x;
   background-position: 0 1.1em;
-  background-image: linear-gradient(to right, transparent 50%, currentColor 50%);
+  background-image: linear-gradient(
+    to right,
+    transparent 50%,
+    currentColor 50%
+  );
 }
-
-
 
 .footnote-body {
   /* hide and position tooltip */
-/*  top: -0.5em; */
+  /*  top: -0.5em; */
   color: white;
   font-size: 100%;
-  color: #FFF;
+  color: #fff;
   padding: 10px;
   text-align: left;
   max-width: 800px;
@@ -362,14 +388,19 @@
   opacity: 1;
 }
 
-
 // ---------------------------
 // APPLICATION SHARED STYLES
 // ---------------------------
 
-.fgred { color: $fgRed !important; }
-.fgfaded { color: $bodyFgFaded; }
-.fglight { color: $bodyFgLight; }
+.fgred {
+  color: $fgRed !important;
+}
+.fgfaded {
+  color: $bodyFgFaded;
+}
+.fglight {
+  color: $bodyFgLight;
+}
 
 .breadcrumbs {
   padding: 0;
@@ -385,10 +416,16 @@
   li {
     margin: 0;
     display: inline-block;
-    &:before { content: ' → '; }
-    &:first-child:before { display: none; }
+    &:before {
+      content: " → ";
+    }
+    &:first-child:before {
+      display: none;
+    }
   }
-  a { text-decoration: none; }
+  a {
+    text-decoration: none;
+  }
 }
 
 .toolbar {
@@ -401,14 +438,20 @@
     white-space: nowrap;
     padding-left: $gapSize;
     vertical-align: middle;
-    &:first-child { padding-left: 0; }
+    &:first-child {
+      padding-left: 0;
+    }
     &.wrap-text {
       line-height: 1.1;
       white-space: normal;
     }
   }
-  &.vtop > &_group { vertical-align: top; }
-  .form + & { margin: $gapSize 0 0 0; }
+  &.vtop > &_group {
+    vertical-align: top;
+  }
+  .form + & {
+    margin: $gapSize 0 0 0;
+  }
 }
 
 .flex-toolbar {
@@ -476,7 +519,7 @@
 }
 
 .label {
-  color: #FFF;
+  color: #fff;
   padding: 0 0.5em;
   line-height: 1.75;
   border-radius: 3px;
@@ -486,7 +529,7 @@
   background: rgba(#210, 0.3);
 }
 a.label:hover {
-  color: #FFF;
+  color: #fff;
   background: rgba(#210, 0.5);
 }
 
@@ -498,10 +541,11 @@ a.label:hover {
   position: relative;
   text-align: center;
   white-space: nowrap;
-  &:before, &:after {
+  &:before,
+  &:after {
     width: 50%;
     height: 1px;
-    content: '';
+    content: "";
     position: relative;
     display: inline-block;
     vertical-align: middle;
@@ -517,10 +561,15 @@ a.label:hover {
   }
   &-left {
     text-align: left;
-    &:before { display: none; }
-    &:after { width: 100%; }
+    &:before {
+      display: none;
+    }
+    &:after {
+      width: 100%;
+    }
   }
-  .button, button {
+  .button,
+  button {
     padding: 0 1em;
     margin: 0 -0.5em;
   }
@@ -546,8 +595,12 @@ a.label:hover {
     padding: 0 $gapSize;
     display: table-cell;
     vertical-align: middle;
-    &:first-child { padding-left: 0; }
-    &:last-child { padding-right: 0; }
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
   }
   &_title {
     margin: 0;
@@ -590,19 +643,29 @@ a.label:hover {
   vertical-align: -12%;
   display: inline-block;
   text-decoration: none;
-  &:first-child { margin-right: $iconMargin; }
-  &:last-child { margin-left: $iconMargin; }
-  &:only-child { margin: 0; }
+  &:first-child {
+    margin-right: $iconMargin;
+  }
+  &:last-child {
+    margin-left: $iconMargin;
+  }
+  &:only-child {
+    margin: 0;
+  }
   &-big {
     vertical-align: -16%;
     font-size: $iconSize * 1.5;
   }
 }
-button, .button, .dropdown dd a {
-  .icon { vertical-align: -8%; }
+button,
+.button,
+.dropdown dd a {
+  .icon {
+    vertical-align: -8%;
+  }
 }
 
-.review-breadcrumbs{
+.review-breadcrumbs {
   padding: 0;
   width: 100%;
   vertical-align: top;
@@ -632,12 +695,14 @@ button, .button, .dropdown dd a {
     color: rgba($textColor, 0.65);
     border: 1px solid transparent;
     border-width: 1px 1px 0 1px;
-    &:hover { color: $textColor; }
+    &:hover {
+      color: $textColor;
+    }
     &.active {
       cursor: default;
       color: $textColor;
       border-color: $borderColor;
-      background: linear-gradient(to bottom, mix(#FFF, $bodyBg, 50), $bodyBg);
+      background: linear-gradient(to bottom, mix(#fff, $bodyBg, 50), $bodyBg);
     }
   }
 }
@@ -685,7 +750,9 @@ button, .button, .dropdown dd a {
     position: absolute;
     text-decoration: none;
     color: rgba(#000, 0.4);
-    &:hover { color: #000; }
+    &:hover {
+      color: #000;
+    }
   }
 }
 
@@ -706,7 +773,9 @@ button, .button, .dropdown dd a {
     margin: 0;
     padding: 0;
     list-style: none;
-    li { margin: 0; }
+    li {
+      margin: 0;
+    }
   }
 }
 
@@ -722,12 +791,15 @@ button, .button, .dropdown dd a {
   line-height: 1.25;
   border-collapse: separate;
   border-bottom: 1px solid rgba(#000, 0.08);
-  th, thead td {
+  th,
+  thead td {
     font-weight: bold;
     padding: 15px 10px;
     //white-space: nowrap;
     background: rgba(#000, 0.1);
-    &.wrapped { word-wrap: break-word;}
+    &.wrapped {
+      word-wrap: break-word;
+    }
   }
 
   th.fixed {
@@ -746,7 +818,7 @@ button, .button, .dropdown dd a {
     position: sticky;
     z-index: 3;
     left: 0;
-    box-shadow: 2px 0px 0px 0px rgba(0,0,0,0.1);
+    box-shadow: 2px 0px 0px 0px rgba(0, 0, 0, 0.1);
   }
 
   td {
@@ -770,11 +842,19 @@ button, .button, .dropdown dd a {
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-    &.toleft { padding-left: 0; }
-    &.toright { padding-right: 0; }
-    &.tocenter { text-align: center; }
+    &.toleft {
+      padding-left: 0;
+    }
+    &.toright {
+      padding-right: 0;
+    }
+    &.tocenter {
+      text-align: center;
+    }
   }
-  thead + tbody tr:first-child td { border: 0; }
+  thead + tbody tr:first-child td {
+    border: 0;
+  }
   &.striped tr:nth-child(even) {
     background-clip: padding-box;
     background-color: rgba(#000, 0.03);
@@ -798,7 +878,9 @@ button, .button, .dropdown dd a {
 
 .litebox-embed {
   margin: $gapSize auto;
-  .litebox & { margin: 0; }
+  .litebox & {
+    margin: 0;
+  }
 }
 
 .counter {
@@ -832,17 +914,23 @@ button, .button, .dropdown dd a {
   background-repeat: no-repeat;
   background-color: rgba(#200, 0.2);
   background-position: center bottom;
-  @include background-svg(16, 16, '<path fill="#100" opacity="0.5" d="M12.53,11.96c-2.1-0.8-2.77-1.47-2.77-2.91c0-0.87,0.64-0.58,0.92-2.17c0.12-0.66,0.68-0.01,0.79-1.51 c0-0.6-0.31-0.75-0.31-0.75s0.16-0.89,0.22-1.57C11.46,2.19,10.91,0,8,0C5.09,0,4.54,2.19,4.62,3.04c0.06,0.68,0.22,1.57,0.22,1.57 S4.53,4.76,4.53,5.36c0.11,1.5,0.67,0.85,0.79,1.51c0.28,1.59,0.92,1.3,0.92,2.17c0,1.44-0.67,2.12-2.77,2.91 C1.37,12.76,0,13.57,0,14.13S0,16,0,16h16c0,0,0-1.31,0-1.87S14.63,12.76,12.53,11.96L12.53,11.96z"/>');
+  @include background-svg(
+    16,
+    16,
+    '<path fill="#100" opacity="0.5" d="M12.53,11.96c-2.1-0.8-2.77-1.47-2.77-2.91c0-0.87,0.64-0.58,0.92-2.17c0.12-0.66,0.68-0.01,0.79-1.51 c0-0.6-0.31-0.75-0.31-0.75s0.16-0.89,0.22-1.57C11.46,2.19,10.91,0,8,0C5.09,0,4.54,2.19,4.62,3.04c0.06,0.68,0.22,1.57,0.22,1.57 S4.53,4.76,4.53,5.36c0.11,1.5,0.67,0.85,0.79,1.51c0.28,1.59,0.92,1.3,0.92,2.17c0,1.44-0.67,2.12-2.77,2.91 C1.37,12.76,0,13.57,0,14.13S0,16,0,16h16c0,0,0-1.31,0-1.87S14.63,12.76,12.53,11.96L12.53,11.96z"/>'
+  );
   img {
     width: 100%;
     height: 100%;
     display: block;
   }
-  &.userpic-small { font-size: 30px; }
+  &.userpic-small {
+    font-size: 30px;
+  }
 }
 
 .progress {
-  $color: #6C2;
+  $color: #6c2;
   width: 100%;
   height: 1em;
   font-size: 10px;
@@ -851,11 +939,11 @@ button, .button, .dropdown dd a {
   position: relative;
   border-radius: 0.5em;
   display: inline-block;
-  background: rgba(#FFF, 0.8);
+  background: rgba(#fff, 0.8);
   &:after {
     top: 0;
     left: 0;
-    content: '';
+    content: "";
     width: 100%;
     height: 100%;
     position: absolute;
@@ -868,15 +956,19 @@ button, .button, .dropdown dd a {
     background: $color;
     vertical-align: top;
     display: inline-block;
-    &:nth-child(2) { background: #A3E07A; }
-    &:nth-child(3) { background: #F0E68C; }
+    &:nth-child(2) {
+      background: #a3e07a;
+    }
+    &:nth-child(3) {
+      background: #f0e68c;
+    }
   }
 }
 
 .input-file {
   position: relative;
   padding-right: 80px;
-  input[type=text] {
+  input[type="text"] {
     z-index: 1;
     height: 34px;
     position: relative;
@@ -890,7 +982,7 @@ button, .button, .dropdown dd a {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
-  input[type=file] {
+  input[type="file"] {
     top: 0;
     left: 0;
     right: 0;
@@ -899,7 +991,7 @@ button, .button, .dropdown dd a {
     opacity: 0;
     outline: none;
     position: absolute;
-    &.invalid + input[type=text] {
+    &.invalid + input[type="text"] {
       color: $inputInvalidColor;
       border-color: rgba($inputInvalidColor, 0.5);
     }
@@ -963,17 +1055,26 @@ button, .button, .dropdown dd a {
     background-color: $fgLink;
     background-position: center;
     background-repeat: no-repeat;
-    @include background-svg(10, 10, '<path fill="none" stroke="#FFF" stroke-width="1.6" d="M0,0 L10,10 M10,0 L0,10"/>');
-    &:hover { background-color: $fgHover; }
+    @include background-svg(
+      10,
+      10,
+      '<path fill="none" stroke="#FFF" stroke-width="1.6" d="M0,0 L10,10 M10,0 L0,10"/>'
+    );
+    &:hover {
+      background-color: $fgHover;
+    }
   }
-  &:hover .remove { display: block; }
+  &:hover .remove {
+    display: block;
+  }
 }
 
 .user-select-form {
   margin: 1em 0;
   position: relative;
   padding-right: 59px;
-  select, .select2-container--default .select2-selection--single {
+  select,
+  .select2-container--default .select2-selection--single {
     border-right-width: 0;
     border-radius: $btnBorderRadius 0 0 $btnBorderRadius;
   }
@@ -986,7 +1087,6 @@ button, .button, .dropdown dd a {
     border-bottom-left-radius: 0;
   }
 }
-
 
 // ---------------------------
 // PAGINATION
@@ -1027,7 +1127,6 @@ button, .button, .dropdown dd a {
   }
 }
 
-
 // ---------------------------
 // SPEECH BUBBLE
 // ---------------------------
@@ -1043,22 +1142,24 @@ button, .button, .dropdown dd a {
     font-size: 40px;
     margin-left: -55px;
   }
-  &_content, &_form {
+  &_content,
+  &_form {
     border-radius: 4px;
     position: relative;
     padding: $gapSize * 0.75;
     background-clip: padding-box;
     border: 1px solid rgba(#000, 0.06);
-    background-color: mix(#FFF, $bodyBg, 35%);
-    &:before, &:after {
+    background-color: mix(#fff, $bodyBg, 35%);
+    &:before,
+    &:after {
       top: 12px;
       left: -8px;
-      content: '';
+      content: "";
       font-size: 8px;
       position: absolute;
       border: 8px solid transparent;
       border-left-width: 0;
-      border-right-color: mix(#FFF, $bodyBg, 35%);
+      border-right-color: mix(#fff, $bodyBg, 35%);
     }
     &:before {
       left: -9px;
@@ -1079,12 +1180,14 @@ button, .button, .dropdown dd a {
   }
   &_form {
     padding: 0;
-    &:after { border-right-color: mix(#FFF, $bodyBg, 80%); }
+    &:after {
+      border-right-color: mix(#fff, $bodyBg, 80%);
+    }
     &_editor {
       padding: $gapSize / 4;
       border-top-left-radius: inherit;
       border-top-right-radius: inherit;
-      background: mix(#FFF, $bodyBg, 80%);
+      background: mix(#fff, $bodyBg, 80%);
       border-bottom: 1px solid rgba(#000, 0.06);
     }
     &_footer {
@@ -1097,7 +1200,9 @@ button, .button, .dropdown dd a {
         display: inline-block;
         vertical-align: middle;
         margin-right: $gapSize / 2;
-        &:hover { color: $bodyFg; }
+        &:hover {
+          color: $bodyFg;
+        }
       }
     }
     &_error {
@@ -1116,12 +1221,15 @@ button, .button, .dropdown dd a {
     display: flex;
     align-items: center;
     gap: 2px;
-    a, button {
+    a,
+    button {
       margin-left: 8px;
       vertical-align: top;
       display: inline-block;
       color: rgba($bodyFg, 0.3);
-      &:hover { color: rgba($bodyFg, 0.6); }
+      &:hover {
+        color: rgba($bodyFg, 0.6);
+      }
 
       padding: 0;
       border: none;
@@ -1147,16 +1255,16 @@ button, .button, .dropdown dd a {
   border-bottom: 1px solid rgba(#000, 0.1);
   ins {
     color: $bodyFg;
-    background: #CEC;
+    background: #cec;
     text-decoration: none;
   }
   del {
     color: $bodyFg;
-    background: #FCC;
+    background: #fcc;
   }
   span {
     color: $bodyFg;
-    background: #FFF;
+    background: #fff;
   }
 }
 
@@ -1211,7 +1319,9 @@ button, .button, .dropdown dd a {
     text-decoration: none;
     text-overflow: ellipsis;
     padding: 0 $gapSize / 2;
-    &:hover { color: $bodyFg; }
+    &:hover {
+      color: $bodyFg;
+    }
     &.selected {
       color: $bodyFg;
       background-color: rgba(#000, 0.06);
@@ -1251,7 +1361,7 @@ button, .button, .dropdown dd a {
     &.view-document {
       svg {
         height: 25px;
-        fill: mix($btnColor, #FFF, 30%);
+        fill: mix($btnColor, #fff, 30%);
       }
       &.active {
         svg {
@@ -1272,15 +1382,15 @@ button, .button, .dropdown dd a {
 
     &::after,
     &::before {
-      content: '';
+      content: "";
       display: block;
       border-radius: 2px;
-      background-color: mix($btnColor, #FFF, 30%);
+      background-color: mix($btnColor, #fff, 30%);
     }
 
     &.active::after,
     &.active::before {
-      content: '';
+      content: "";
       display: block;
       border-radius: 2px;
       background-color: $btnBackground;
@@ -1335,7 +1445,7 @@ button, .button, .dropdown dd a {
       .version-content {
         padding: 20px;
         flex: 1;
-        background-color: mix($bodyBg, #FFF, 30%);
+        background-color: mix($bodyBg, #fff, 30%);
 
         div.source-code {
           display: none;
@@ -1371,22 +1481,29 @@ button, .button, .dropdown dd a {
     // background-color: mix($bodyBg, #000, 96%);
   }
   p {
-    margin: $lineHeight+em 0 0 0;
-    &:first-child { margin-top: 0; }
+    margin: $lineHeight + em 0 0 0;
+    &:first-child {
+      margin-top: 0;
+    }
   }
-  .original { display: none; }
+  .original {
+    display: none;
+  }
   ins {
-    background: #CEC;
+    background: #cec;
     text-decoration: none;
   }
-  del { background: #FCC; }
-  span { background: #FFF; }
+  del {
+    background: #fcc;
+  }
+  span {
+    background: #fff;
+  }
   [data-empty]:empty:before {
     opacity: 0.5;
     content: attr(data-empty);
   }
 }
-
 
 .notice {
   display: flex;
@@ -1406,7 +1523,6 @@ button, .button, .dropdown dd a {
   }
 }
 
-
 .tagcloud {
   padding: 0;
   display: flex;
@@ -1424,16 +1540,36 @@ button, .button, .dropdown dd a {
     font-size: calc(var(--size) * 0.125em + 0.875em);
     opacity: calc((20 - (9 - var(--size))) / 20);
 
-    &[data-weight="0"] { --size: 0; }
-    &[data-weight="1"] { --size: 1; }
-    &[data-weight="2"] { --size: 2; }
-    &[data-weight="3"] { --size: 3; }
-    &[data-weight="4"] { --size: 4; }
-    &[data-weight="5"] { --size: 5; }
-    &[data-weight="6"] { --size: 6; }
-    &[data-weight="7"] { --size: 7; }
-    &[data-weight="8"] { --size: 8; }
-    &[data-weight="9"] { --size: 9; }
+    &[data-weight="0"] {
+      --size: 0;
+    }
+    &[data-weight="1"] {
+      --size: 1;
+    }
+    &[data-weight="2"] {
+      --size: 2;
+    }
+    &[data-weight="3"] {
+      --size: 3;
+    }
+    &[data-weight="4"] {
+      --size: 4;
+    }
+    &[data-weight="5"] {
+      --size: 5;
+    }
+    &[data-weight="6"] {
+      --size: 6;
+    }
+    &[data-weight="7"] {
+      --size: 7;
+    }
+    &[data-weight="8"] {
+      --size: 8;
+    }
+    &[data-weight="9"] {
+      --size: 9;
+    }
   }
 
   a {

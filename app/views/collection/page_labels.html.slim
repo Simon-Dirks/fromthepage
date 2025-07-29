@@ -31,13 +31,14 @@ p = t('.page_labels_description')
       - if @pages_by_label[label.id].empty?
         p = t('.no_pages_with_this_label')
       - else
-        table.datagrid
-          thead
-            tr
-              th = t('.page')
-              th = t('.work')
-          tbody
-            - @pages_by_label[label.id].each do |page|
+        .scrollable-pages-table
+          table.datagrid
+            thead
               tr
-                td = link_to page.title, { controller: 'display', action: 'display_page', page_id: page.id, work_id: page.work.id }
-                td = link_to page.work.title, { controller: 'display', action: 'read_work', work_id: page.work.id }
+                th = t('.page')
+                th = t('.work')
+            tbody
+              - @pages_by_label[label.id].each do |page|
+                tr
+                  td = link_to page.title, { controller: 'display', action: 'display_page', page_id: page.id, work_id: page.work.id }
+                  td = link_to page.work.title, { controller: 'display', action: 'read_work', work_id: page.work.id }

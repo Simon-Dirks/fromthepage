@@ -861,6 +861,22 @@ button,
   }
 }
 
+.scrollable-pages-table {
+  max-height: 40rem;
+  overflow-y: auto;
+
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #e5e3dd;
+
+    th {
+      background-color: transparent;
+    }
+  }
+}
+
 .nodata {
   margin: $gapSize 0;
   padding: $gapSize * 2;

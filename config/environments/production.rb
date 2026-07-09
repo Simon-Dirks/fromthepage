@@ -41,7 +41,7 @@ Rails.application.configure do
   config.active_record.verbose_query_logs = true
 
   # number of complex assets.
-  config.assets.debug = true
+  config.assets.debug = false
 
   config.assets.quiet = true
 
